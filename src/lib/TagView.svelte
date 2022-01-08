@@ -1,6 +1,6 @@
 <script lang="ts">
   import Tag from './Tag.svelte'
-  let tags: string[] = []
+  export let tags: string[] = []
   let inputtingTag = ""
   const addTag = () => {
     tags = [...tags, inputtingTag]
