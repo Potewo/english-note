@@ -2,13 +2,14 @@
   import { createEventDispatcher } from 'svelte'
   export let name = ""
   export let i: number
+  export let viewMode = false
   const dispatch = createEventDispatcher<{delete: number}>()
   const handleDelete = () => {
     dispatch('delete', i)
   }
 </script>
 
-<span class="tag">{name} <span class="deleteButton" on:click={handleDelete}></span></span>
+<span class="tag">{name} { #if !viewMode }<span class="deleteButton" on:click={handleDelete}></span> { /if }</span>
 
 <style>
   .tag {

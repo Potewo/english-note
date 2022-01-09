@@ -1,6 +1,7 @@
 <script lang="ts">
   import Tag from './Tag.svelte'
   export let tags: string[] = []
+  export let viewMode: boolean = false
   let inputtingTag = ""
   const addTag = () => {
     tags = [...tags, inputtingTag]
@@ -15,19 +16,20 @@
 <div class="tagView">
   {#each tags as tagName, i}
   <div class="tag">
-    <Tag name={tagName} i={i} on:delete={deleteTag}/>
+    <Tag name={tagName} i={i} on:delete={deleteTag} viewMode/>
   </div>
   {/each}
-  <input bind:value={inputtingTag} on:change={addTag}/>
+  { #if !viewMode }
+    <input bind:value={inputtingTag} on:change={addTag}/>
+  { /if }
 </div>
 
 <style>
   .tagView {
-    background-color: #cccccc;
-    padding: 10px;
+    padding: 10px 0px;
   }
   .tag {
     display: inline-block;
-    margin: 5px;
+    margin-right: 5px;
   }
 </style>
