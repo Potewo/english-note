@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
+  import { link } from 'svelte-routing'
   import type { TNote } from '../note'
   export let notes: TNote[]
   let currentNote: TNote
@@ -24,9 +25,9 @@
     <tr>
       <td>{note.english}</td>
       <td>{note.japanese}</td>
-      <td><a class="uk-icon" href={"/edit/" + note.uuid}><span class="material-icons-outlined">edit</span></a></td>
+      <td><a class="uk-icon" href={"/edit/" + note.uuid} use:link><span class="material-icons-outlined">edit</span></a></td>
       <td><button class="uk-icon" on:click={() => {currentNote = note;handleDelete()}}><span class="material-icons-outlined">delete</span></button></td>
-      <td><a class="uk-icon" href={"/notes/" + note.uuid}><span class="material-icons-outlined">navigate_next</span></a></td>
+      <td><a class="uk-icon" href={"/notes/" + note.uuid} use:link><span class="material-icons-outlined">navigate_next</span></a></td>
     </tr>
   {/each}
   </tbody>
