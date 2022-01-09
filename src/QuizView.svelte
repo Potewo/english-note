@@ -22,7 +22,7 @@
 <div class="uk-margin-auto uk-width-1-2@m">
 <ul class="uk-pagination">
   <li class="uk-margin-small-left">
-    <button on:click={prev}>
+    <button on:click={prev} class="uk-button uk-button-link">
       <span class="uk-margin-small-right" uk-pagination-previous></span>
     </button>
   </li>
