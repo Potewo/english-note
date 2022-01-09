@@ -3,6 +3,7 @@
   import New from './New.svelte'
   import NoteList from './lib/NoteList.svelte'
   import Note from './lib/Note.svelte'
+  import QuizView from './QuizView.svelte'
   import { Note as TNote } from './note'
   import { Api } from './api'
   /* import Header from './Header.svelte' */
@@ -71,6 +72,9 @@
     </Route>
     <Route path="edit/:id" let:params>
       <Note on:send={handleUpload} note="{notes.find(obj => obj.uuid == params.id)}" mode={"update"} />
+    </Route>
+    <Route path="/quiz">
+      <QuizView notes={notes}/>
     </Route>
   </Router>
 </main>
