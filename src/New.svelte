@@ -6,4 +6,4 @@
 </script>
 
 <TagView bind:tags={tags}/>
-<Note on:send isEditMode={true}/>
+<Note on:send mode={"new"}/>

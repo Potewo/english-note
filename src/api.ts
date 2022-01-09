@@ -35,11 +35,20 @@ response: ${response.text()}`)
       })
     })
   }
-  async add(note: TNote) : Promise<string> {
+  upload(method: "new"|"update"|"delete", note: TNote) : Promise<string> {
+    let httpMethod: string
+    if (method == "new") {
+      httpMethod = "post"
+    } else if (method == "update") {
+      httpMethod = "put"
+    } else if (method == "delete") {
+      httpMethod = "delete"
+    }
+    console.log(httpMethod)
     return new Promise((resolve, reject) => {
       console.log(JSON.stringify(note))
-      fetch(this.url + "/add", {
-        method: "post",
+      fetch(this.url + "/upload", {
+        method: httpMethod,
         headers: {
           "Content-Type": "application/json"
         },

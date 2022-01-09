@@ -9,34 +9,44 @@
   import Header2 from './Header2.svelte'
   let notes: TNote[] = []
   let tags: string[] = []
-  const handleSend = (e: CustomEvent<TNote>) => {
+  const api = new Api("http://localhost:1323")
+  const handleUpload = (e: CustomEvent<{note: TNote, method: "new"|"update"|"delete"}>) => {
+    console.log(e.detail.note, e.detail.method)
     if (e.detail) {
-      api.add(e.detail)
+      api.upload(e.detail.method, e.detail.note)
       .then(ok => {
         if (ok != "ok") {
           console.error("Can't send note to server.")
           return
+        } else {
+          console.log("sended")
         }
       })
       .catch(err => {
         console.error(err)
         return
       })
+      let currentNote = new TNote()
+      console.log(currentNote)
+      currentNote.english = e.detail.note.english
+      currentNote.japanese = e.detail.note.japanese
+      currentNote.description = e.detail.note.description
+      currentNote.examples = e.detail.note.examples
+      currentNote.similar = e.detail.note.similar
+      currentNote.tags = [...tags]
+      currentNote.uuid = e.detail.note.uuid
+      if (e.detail.method == "new") {
+        notes.push(currentNote)
+      } else if (e.detail.method == "update") {
+        let targetIndex = notes.findIndex(note => note.uuid == currentNote.uuid)
+        notes[targetIndex] = currentNote
+      } else if (e.detail.method == "delete") {
+        notes = notes.filter(note => note.uuid != currentNote.uuid)
+      }
+      console.log(notes)
+      notes = notes
     }
-    let currentNote = new TNote()
-    console.log(currentNote)
-    currentNote.english = e.detail.english
-    currentNote.japanese = e.detail.japanese
-    currentNote.description = e.detail.description
-    currentNote.examples = e.detail.examples
-    currentNote.similar = e.detail.similar
-    currentNote.tags = [...tags]
-    currentNote.uuid = e.detail.uuid
-    notes.push(currentNote)
-    console.log(notes)
-    notes = notes
   }
-  const api = new Api("http://localhost:1323")
   api.get().then(data => {
     console.log("Success")
     notes = data
@@ -51,14 +61,16 @@
 <main>
   <Router>
     <Route path="new">
-      <New on:send={handleSend} bind:tags={tags} />
+      <New on:send={handleUpload} bind:tags={tags} />
     </Route>
-    <Route path="/" component="{NoteList}" bind:notes="{notes}" />
+    <Route path="/">
+      <NoteList bind:notes={notes} on:delete={handleUpload} />
+    </Route>
     <Route path="notes/:id" let:params>
       <Note note="{notes.find(obj => obj.uuid == params.id)}"/>
     </Route>
     <Route path="edit/:id" let:params>
-      <Note note="{notes.find(obj => obj.uuid == params.id)}" isEditMode={true} />
+      <Note on:send={handleUpload} note="{notes.find(obj => obj.uuid == params.id)}" mode={"update"} />
     </Route>
   </Router>
 </main>

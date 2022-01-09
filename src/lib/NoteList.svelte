@@ -1,6 +1,12 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte'
   import type { TNote } from '../note'
   export let notes: TNote[]
+  let currentNote: TNote
+  const dispatcher = createEventDispatcher<{"delete": {note: TNote, method: "delete"}}>()
+  const handleDelete = () => {
+    dispatcher("delete", {note: currentNote, method: "delete"})
+  }
 </script>
 
 <table class="uk-table uk-table-middle uk-table-striped">
@@ -19,7 +25,7 @@
       <td>{note.english}</td>
       <td>{note.japanese}</td>
       <td><a class="uk-icon" href={"/edit/" + note.uuid}><span class="material-icons-outlined">edit</span></a></td>
-      <td><button class="uk-icon"><span class="material-icons-outlined">delete</span></button></td>
+      <td><button class="uk-icon" on:click={() => {currentNote = note;handleDelete()}}><span class="material-icons-outlined">delete</span></button></td>
       <td><a class="uk-icon" href={"/notes/" + note.uuid}><span class="material-icons-outlined">navigate_next</span></a></td>
     </tr>
   {/each}
