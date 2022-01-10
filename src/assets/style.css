@@ -1,0 +1,24 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --site-primary-color: #3DE367;
+  --site-secondary-color: #5FD47C;
+  --site-third-color: #7AFD9B;
+  --site-gray-color: #BDDEC5;
+}
+
+.site-primary-bg {
+  background-color: var(--site-primary-color) !important;
+}
+.site-secondary-bg {
+  background-color: var(--site-secondary-color) !important;
+}
+.site-third-bg {
+  background-color: var(--site-third-color) !important;
+}
+.site-gray-bg {
+  background-color: var(--site-gray-color) !important;
+}
