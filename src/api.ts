@@ -1,7 +1,7 @@
 import type { TNote } from './note'
 import type { Record } from './record'
 
-export class Api {
+class Api {
   url: string
   constructor(url: string) {
     this.url = url
@@ -110,14 +110,14 @@ response: ${response.text()}`)
       })
     })
   }
-  addRecord(record: Record): Promise<string> {
+  addRecord(records: Record[]): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       fetch(this.url + "/record", {
         method: "post",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(record)
+        body: JSON.stringify(records)
       })
       .then(response => {
         if (response.ok && response.status == 200) {
@@ -132,3 +132,5 @@ response: ${response.text()}`)
     })
   }
 }
+
+export const api = new Api("http://localhost:1323")
