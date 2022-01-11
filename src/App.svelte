@@ -5,12 +5,11 @@
   import Note from './lib/Note.svelte'
   import QuizView from './QuizView.svelte'
   import { Note as TNote } from './note'
-  import { Api } from './api'
+  import { api } from './api'
   /* import Header from './Header.svelte' */
   import Header2 from './Header2.svelte'
   let notes: TNote[] = []
   let tags: string[] = []
-  const api = new Api("http://localhost:1323")
   const handleUpload = (e: CustomEvent<{note: TNote, method: "new"|"update"|"delete"}>) => {
     console.log(e.detail.note, e.detail.method)
     if (e.detail) {
@@ -74,7 +73,7 @@
       <Note on:send={handleUpload} note="{notes.find(obj => obj.uuid == params.id)}" mode={"update"} />
     </Route>
     <Route path="/quiz">
-      <QuizView notes={notes}/>
+      <QuizView notes={notes} />
     </Route>
   </Router>
 </main>
