@@ -19,7 +19,14 @@
 
 <Quiz note={notes[i]} />
 
-<div class="uk-margin-auto uk-width-1-2@m">
+<div class="uk-width-1-2@m uk-margin-auto uk-margin-medium-top">
+  <div class="uk-text-center">
+    <button class="uk-button uk-button-default uk-margin-auto-left"><span uk-icon="icon: close"></span></button>
+    <button class="uk-button uk-button-default uk-margin-small-left uk-margin-right-auto"><span uk-icon="icon: check"></span></button>
+  </div>
+</div>
+
+<div class="uk-margin-auto uk-width-1-2@m uk-margin-small-top">
 <ul class="uk-pagination">
   <li class="uk-margin-small-left">
     <button on:click={prev} class="uk-button uk-button-link">
