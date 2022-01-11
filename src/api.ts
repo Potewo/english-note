@@ -1,4 +1,5 @@
 import type { TNote } from './note'
+import type { Record } from './record'
 
 export class Api {
   url: string
@@ -76,6 +77,57 @@ response: ${response.text()}`)
       })
       .catch(e => {
         reject(e)
+      })
+    })
+  }
+  getRecords(): Promise<Record[]> {
+    return new Promise<Record[]>((resolve, reject) => {
+      fetch(this.url + "/record", {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json"
+        },
+      })
+      .then(response => {
+        if (response.ok) {
+          if (response.status == 200) {
+            response.json()
+            .then(result => {
+              resolve(result)
+            })
+            .catch(err => {
+              reject("not valid json received" + err)
+            })
+          } else {
+            reject("Server returned: " + response.status)
+          }
+        } else {
+          reject("Response is not ok: " + response.status)
+        }
+      })
+      .catch(err => {
+        reject("Failed to fetch: " + err)
+      })
+    })
+  }
+  addRecord(record: Record): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      fetch(this.url + "/record", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(record)
+      })
+      .then(response => {
+        if (response.ok && response.status == 200) {
+          resolve("ok")
+        } else {
+          reject("Server returned error: " + response.status)
+        }
+      })
+      .catch(err => {
+        reject("Failed to fetch: " + err)
       })
     })
   }
