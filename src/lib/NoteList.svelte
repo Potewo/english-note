@@ -2,14 +2,19 @@
   import { createEventDispatcher } from 'svelte'
   import { link } from 'svelte-routing'
   import type { TNote } from '../note'
+  import TagView from './TagView.svelte'
   export let notes: TNote[]
   let currentNote: TNote
   const dispatcher = createEventDispatcher<{"delete": {note: TNote, method: "delete"}}>()
   const handleDelete = () => {
     dispatcher("delete", {note: currentNote, method: "delete"})
   }
+  let filteringTags: string[] = []
+  $: filteredNotes = notes.filter(note => {
+    return note.tags.length == 0 || note.tags.some(tag => {return filteringTags.includes(tag) || filteringTags.length == 0})
+  })
 </script>
-
+<TagView bind:tags={filteringTags} dataList={notes.map(note => note.tags).flat()}/>
 <table class="uk-table uk-table-middle uk-table-striped">
   <thead>
     <tr>
@@ -21,7 +26,7 @@
     </tr>
   </thead>
   <tbody>
-  {#each notes as note}
+  {#each filteredNotes as note}
     <tr>
       <td>{note.english}</td>
       <td>{note.japanese}</td>
