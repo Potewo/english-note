@@ -133,4 +133,5 @@ response: ${response.text()}`)
   }
 }
 
-export const api = new Api("http://localhost:1323")
+let hostname = location.hostname
+export const api = new Api("http://" + hostname + ":1323")
