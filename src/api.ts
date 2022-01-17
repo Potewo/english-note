@@ -134,4 +134,8 @@ response: ${response.text()}`)
 }
 
 let hostname = location.hostname
-export const api = new Api("http://" + hostname + ":1323")
+let port = ":1323"
+if (import.meta.env.PROD) {
+  port = ":" + location.port
+}
+export const api = new Api("http://" + hostname + port)
