@@ -133,8 +133,8 @@ response: ${response.text()}`)
   }
 }
 
-let url = "localhost:1323"
+let url = "http://localhost:1323"
 if (import.meta.env.PROD) {
-  url = location.host
+  url = location.origin
 }
-export const api = new Api("http://" + url)
+export const api = new Api(url)
