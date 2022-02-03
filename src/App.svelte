@@ -1,17 +1,17 @@
 <script lang="ts">
   import { Router, Route } from 'svelte-routing'
-  import New from './New.svelte'
-  import NoteList from './lib/NoteList.svelte'
-  import Note from './lib/Note.svelte'
-  import QuizView from './QuizView.svelte'
-  import Header2 from './Header2.svelte'
-  import { notes } from './store'
-  import type { Tag } from './note'
+  import New from 'routes/New.svelte'
+  import NoteList from 'lib/NoteList.svelte'
+  import Note from 'lib/Note.svelte'
+  import QuizView from 'routes/QuizView.svelte'
+  import Header from 'lib/Header.svelte'
+  import { notes } from './utils/store'
+  import type { Tag } from './utils/note'
   let tags: Tag[] = []
   notes.get()
 </script>
 
-<Header2 />
+<Header />
 <main>
   <Router>
     <Route path="new">

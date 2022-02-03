@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Note } from '../note'
-  import TagView from './TagView.svelte'
+  import type { Note } from '../utils/note'
+  import TagView from 'lib/TagView.svelte'
   export let note: Note
   console.log(note)
 </script>

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Tag } from '../note'
-  import TagComponent from './Tag.svelte'
+  import type { Tag } from '../utils/note'
+  import TagComponent from 'lib/Tag.svelte'
   export let tags: Tag[] = []
   export let viewMode: boolean = false
   export let dataList: string[] = []

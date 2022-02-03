@@ -1,8 +1,8 @@
 <script lang="ts">
   import { link } from 'svelte-routing'
-  /* import type { Note, Tag } from '../note' */
+  /* import type { Note, Tag } from 'scripts/note' */
   /* import TagView from './TagView.svelte' */
-  import { notes } from '../store'
+  import { notes } from '../utils/store'
 </script>
 <!-- <TagView bind:tags={$notes} dataList={$notes.map(note => note.Tags.map(tag => tag.Name)).flat()}/> */ -->
 <table class="uk-table uk-table-middle uk-table-striped">

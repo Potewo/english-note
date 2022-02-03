@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { records } from './store'
-  import type { Record } from './record'
-  import type { Note } from './note'
-  import Quiz from './lib/Quiz.svelte'
-  import QuizResult from './QuizResult.svelte'
+  import { records } from '../utils/store'
+  import type { Record } from '../utils/record'
+  import type { Note } from '../utils/note'
+  import Quiz from 'lib/Quiz.svelte'
+  import QuizResult from 'lib/QuizResult.svelte'
   export let notes: Note[]
   let currentRecords: Record[] = []
   let i = 0
