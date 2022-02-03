@@ -1,18 +1,25 @@
 <script lang="ts">
-  import { v4 as uuidv4 } from 'uuid'
-  import { createEventDispatcher } from 'svelte'
-  import { Note, TNote } from '../note'
-  export let note = new Note()
+  import type { Note } from '../note'
+  import { notes } from '../store'
+  export let note: Note = {
+    ID: 0,
+    CreatedAt: null,
+    UpdatedAt: null,
+    DeletedAt: null,
+    English: "",
+    Japanese: "",
+    Description: "",
+    Examples: "",
+    Similar: "",
+    Tags: [],
+  }
   export let mode: "new"|"view"|"update" = "view"
-  const dispatcher = createEventDispatcher<{"send": {note: TNote, method: "new"|"update"}}>()
   const handleSend = () => {
     if (mode == "new") {
-      note.uuid = uuidv4()
-      dispatcher('send', {note: note, method: "new"})
+      notes.add([note])
     } else if (mode == "update") {
-      dispatcher('send', {note: note, method: "update"})
+      notes.update([note])
     }
-    note = new Note()
   }
 </script>
 
@@ -20,45 +27,45 @@
 <label for="english">英語</label></p>
 <p>
 {#if mode=="new" || mode=="update"}
-  <textarea id="english" bind:value={note.english}></textarea>
+  <textarea id="english" bind:value={note.English}></textarea>
 {:else}
-  <span>{note.english}</span>
+  <span>{note.English}</span>
 {/if}
 </p>
 
 <p><label for="japanese">日本語</label></p>
 <p>
 {#if mode=="new" || mode=="update"}
-  <textarea id="japanese" bind:value={note.japanese}></textarea>
+  <textarea id="japanese" bind:value={note.Japanese}></textarea>
 {:else}
-  <span>{note.japanese}</span>
+  <span>{note.Japanese}</span>
 {/if}
 </p>
 
 <p><label for="description">説明</label></p>
 <p>
 {#if mode=="new" || mode=="update"}
-  <textarea id="description" bind:value={note.description}></textarea>
+  <textarea id="description" bind:value={note.Description}></textarea>
 {:else}
-  <span>{note.description}</span>
+  <span>{note.Description}</span>
 {/if}
 </p>
 
 <p><label for="examples">用例</label></p>
 <p>
 {#if mode=="new" || mode=="update"}
-  <textarea id="examples" bind:value={note.examples}></textarea>
+  <textarea id="examples" bind:value={note.Examples}></textarea>
 {:else}
-  <span>{note.examples}</span>
+  <span>{note.Examples}</span>
 {/if}
 </p>
 
 <p><label for="similar">類似</label></p>
 <p>
 {#if mode=="new" || mode=="update"}
-  <textarea id="similar" bind:value={note.similar}></textarea>
+  <textarea id="similar" bind:value={note.Similar}></textarea>
 {:else}
-  <span>{note.similar}</span>
+  <span>{note.Similar}</span>
 {/if}
 </p>
 {#if mode=="new" || mode=="update"}

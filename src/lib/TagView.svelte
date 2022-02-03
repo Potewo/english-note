@@ -1,6 +1,7 @@
 <script lang="ts">
-  import Tag from './Tag.svelte'
-  export let tags: string[] = []
+  import type { Tag } from '../note'
+  import TagComponent from './Tag.svelte'
+  export let tags: Tag[] = []
   export let viewMode: boolean = false
   export let dataList: string[] = []
   let inputtingTag = ""
@@ -9,7 +10,14 @@
     tags = tags
   }
   const handleSubmit = () => {
-    tags.push(inputtingTag)
+    tags.push({
+      ID: null,
+      CreatedAt: null,
+      UpdatedAt: null,
+      DeletedAt: null,
+      Name: inputtingTag,
+      NoteID: null
+    })
     tags = tags
     inputtingTag = ""
   }
@@ -27,9 +35,9 @@
       </datalist>
     </form>
   { /if }
-  {#each tags as tagName, i}
+  {#each tags as tag, i}
   <div class="tag">
-    <Tag name={tagName} i={i} on:delete={deleteTag} viewMode={viewMode}/>
+    <TagComponent name={tag.Name} i={i} on:delete={deleteTag} viewMode={viewMode}/>
   </div>
   {/each}
 </div>

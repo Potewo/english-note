@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@primer/css": "^19.1.1",
+    "@types/uikit": "^3.3.2",
     "@types/uuid": "^8.3.4",
     "material-icons": "^1.10.5",
     "sass": "^1.46.0",

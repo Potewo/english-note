@@ -1,9 +1,10 @@
 <script lang="ts">
+  import type { Tag } from './note'
   import TagView from './lib/TagView.svelte'
   import Note from './lib/Note.svelte'
 
-  export let tags: string[]
+  export let tags: Tag[]
 </script>
 
 <TagView bind:tags={tags}/>
-<Note on:send mode={"new"}/>
+<Note mode={"new"}/>

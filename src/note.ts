@@ -1,22 +1,21 @@
-import { NIL as NIL_UUID } from 'uuid'
-
-export type TNote = {
-  english: string
-  japanese: string
-  description: string
-  examples: string
-  similar: string
-  tags: string[]
-  uuid: string
+export type Note = {
+  ID: number
+  CreatedAt: string
+  UpdatedAt: string
+  DeletedAt: string
+  English: string
+  Japanese: string
+  Description: string
+  Examples: string
+  Similar: string
+  Tags: Tag[]
 }
 
-export class Note implements TNote {
-  english: string = ""
-  japanese: string = ""
-  description: string = ""
-  examples: string = ""
-  similar: string = ""
-  tags: string[] = []
-  uuid: string = NIL_UUID
+export type Tag = {
+  ID: number
+  CreatedAt: string
+  UpdatedAt: string
+  DeletedAt: string
+  NoteID: number
+  Name: string
 }
-

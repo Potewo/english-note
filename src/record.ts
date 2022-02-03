@@ -1,5 +1,8 @@
 export type Record = {
-  uuid: string
-  correct: boolean
-  date: Date
+  ID: number
+  CreatedAt: string
+  UpdatedAt: string
+  DeletedAt: string
+  Correct: boolean
+  NoteID: number
 }

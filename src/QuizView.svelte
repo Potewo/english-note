@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { api } from './api'
+  import { records } from './store'
   import type { Record } from './record'
-  import type { TNote } from './note'
+  import type { Note } from './note'
   import Quiz from './lib/Quiz.svelte'
   import QuizResult from './QuizResult.svelte'
-  export let notes: TNote[]
-  let records: Record[] = []
+  export let notes: Note[]
+  let currentRecords: Record[] = []
   let i = 0
   let showResult = false
   const prev = () => {
@@ -22,30 +22,26 @@
   }
   const handleAnswer = (answer: boolean) => {
     let record: Record = {
-      uuid: notes[i].uuid,
-      date: new Date(),
-      correct: answer
+      ID: null,
+      CreatedAt: null,
+      UpdatedAt: null,
+      DeletedAt: null,
+      NoteID: notes[i].ID,
+      Correct: answer,
     }
-    records.push(record)
+    currentRecords.push(record)
     if (i >= notes.length - 1) {
-      api.addRecord(records)
-      .then(ok => {
-        if (ok != "ok") {
-          console.error("something wrong happened")
-        }
-      })
-      .catch(err => {
-        console.error(err)
-      })
+      records.add(currentRecords)
       showResult = true
     } else {
       i++
     }
   }
+  console.log(notes)
 </script>
 
 {#if showResult}
-  <QuizResult notes={notes} records={records} />
+  <QuizResult notes={notes} records={currentRecords} />
 {:else}
 
   <Quiz note={notes[i]} />

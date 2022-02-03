@@ -1,20 +1,10 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
   import { link } from 'svelte-routing'
-  import type { TNote } from '../note'
-  import TagView from './TagView.svelte'
-  export let notes: TNote[]
-  let currentNote: TNote
-  const dispatcher = createEventDispatcher<{"delete": {note: TNote, method: "delete"}}>()
-  const handleDelete = () => {
-    dispatcher("delete", {note: currentNote, method: "delete"})
-  }
-  let filteringTags: string[] = []
-  $: filteredNotes = notes.filter(note => {
-    return note.tags.length == 0 || note.tags.some(tag => {return filteringTags.includes(tag) || filteringTags.length == 0})
-  })
+  /* import type { Note, Tag } from '../note' */
+  /* import TagView from './TagView.svelte' */
+  import { notes } from '../store'
 </script>
-<TagView bind:tags={filteringTags} dataList={notes.map(note => note.tags).flat()}/>
+<!-- <TagView bind:tags={$notes} dataList={$notes.map(note => note.Tags.map(tag => tag.Name)).flat()}/> */ -->
 <table class="uk-table uk-table-middle uk-table-striped">
   <thead>
     <tr>
@@ -29,13 +19,13 @@
     </tr>
   </thead>
   <tbody>
-  {#each filteredNotes as note}
+  {#each $notes as note}
     <tr>
-      <td>{note.english}</td>
-      <td><span class="japanese" hidden>{note.japanese}</span></td>
-      <td><a class="uk-icon" href={"/edit/" + note.uuid} use:link><span class="material-icons-outlined">edit</span></a></td>
-      <td><button class="uk-icon" on:click={() => {currentNote = note;handleDelete()}}><span class="material-icons-outlined">delete</span></button></td>
-      <td><a class="uk-icon" href={"/notes/" + note.uuid} use:link><span class="material-icons-outlined">navigate_next</span></a></td>
+      <td>{note.English}</td>
+      <td><span class="japanese" hidden>{note.Japanese}</span></td>
+      <td><a class="uk-icon" href={"/edit/" + note.ID} use:link><span class="material-icons-outlined">edit</span></a></td>
+      <td><button class="uk-icon" on:click={() => {notes.deletes([note])}}><span class="material-icons-outlined">delete</span></button></td>
+      <td><a class="uk-icon" href={"/notes/" + note.ID} use:link><span class="material-icons-outlined">navigate_next</span></a></td>
     </tr>
   {/each}
   </tbody>

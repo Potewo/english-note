@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Record } from './record'
-  import type { TNote } from './note'
+  import type { Note } from './note'
   export let records: Record[]
-  export let notes: TNote[]
+  export let notes: Note[]
 </script>
 
 <div>

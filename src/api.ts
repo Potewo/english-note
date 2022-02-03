@@ -1,135 +1,125 @@
-import type { TNote } from './note'
+import type { Note } from './note'
 import type { Record } from './record'
+import { handleError } from './util'
 
 class Api {
   url: string
   constructor(url: string) {
     this.url = url
   }
-  get() : Promise<TNote[]> {
-    return new Promise((resolve, reject) => {
-      fetch(this.url + "/get", {
+  async getNotes(): Promise<Note[]> {
+    try {
+      const response = await fetch(this.url + "/note", {
         method: "get",
         headers: {
           "Content-Type": "application/json"
         }
       })
-      .then(response => {
-        if (response.status == 201) {
-          response.json().then(res => {
-            const resData = res as TNote[]
-            console.log(resData)
-            resolve(resData)
-          }).catch(e => {
-            console.log(e)
-            reject(e)
-          })
-        } else {
-          reject(`Status code is different from expected
-expected: 201
-got: ${response.status}
-response: ${response.text()}`)
-        }
-      })
-      .catch(e => {
-        reject(e)
-      })
-    })
-  }
-  upload(method: "new"|"update"|"delete", note: TNote) : Promise<string> {
-    let httpMethod: string
-    if (method == "new") {
-      httpMethod = "post"
-    } else if (method == "update") {
-      httpMethod = "put"
-    } else if (method == "delete") {
-      httpMethod = "delete"
+      if (response.status == 200) {
+        const json = await response.json()
+        return json
+      } else {
+        throw "http status code is different."
+      }
+    } catch (e) {
+      handleError(e, "failed to get notes.")
+      return []
     }
-    console.log(httpMethod)
-    return new Promise((resolve, reject) => {
-      console.log(JSON.stringify(note))
-      fetch(this.url + "/upload", {
-        method: httpMethod,
+  }
+  async addNotes(notes: Note[]): Promise<Note[]> {
+    try {
+      const response = await fetch(this.url + "/note", {
+        method: "post",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(note)
+        body: JSON.stringify(notes)
       })
-      .then(response => {
-        if (response.ok) {
-          if (response.status == 200) {
-            resolve("ok")
-          } else {
-            let error_message = ""
-            let server_message = "Server doesn't return valid message"
-            response.json()
-            .then(data => {
-              server_message = data.message
-            })
-            .catch(e => {
-              error_message = e.stringify()
-            })
-            reject("\nResponse http code is not 200." + error_message + "\nServer error message:\n" + server_message + "\n")
-          }
-        } else {
-          reject("Response is not ok")
-        }
-      })
-      .catch(e => {
-        reject(e)
-      })
-    })
+      if (response.status == 201) {
+        const json = await response.json()
+        return json
+      } else {
+        throw "http status code is different."
+      }
+    } catch (e) {
+      handleError(e, "failed to add notes.")
+      return []
+    }
   }
-  getRecords(): Promise<Record[]> {
-    return new Promise<Record[]>((resolve, reject) => {
-      fetch(this.url + "/record", {
+  async updateNotes(notes: Note[]): Promise<Note[]> {
+    try {
+      const response = await fetch(this.url + "/note", {
+        method: "put",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(notes)
+      })
+      if (response.status == 201) {
+        const json = await response.json()
+        return json
+      } else {
+        throw "http status code is different."
+      }
+    } catch (e) {
+      handleError(e, "failed to update notes.")
+      return null
+    }
+  }
+  async deleteNotes(notes: Note[]) {
+    try {
+      const response = await fetch(this.url + "/note", {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(notes)
+      })
+      if (response.status != 200) {
+        throw "http status code is different."
+      }
+    } catch (e) {
+      handleError(e, "failed to update notes.")
+    }
+  }
+  async getRecords(): Promise<Record[]> {
+    try {
+      const response = await fetch(this.url + "/record", {
         method: "get",
         headers: {
           "Content-Type": "application/json"
-        },
-      })
-      .then(response => {
-        if (response.ok) {
-          if (response.status == 200) {
-            response.json()
-            .then(result => {
-              resolve(result)
-            })
-            .catch(err => {
-              reject("not valid json received" + err)
-            })
-          } else {
-            reject("Server returned: " + response.status)
-          }
-        } else {
-          reject("Response is not ok: " + response.status)
         }
       })
-      .catch(err => {
-        reject("Failed to fetch: " + err)
-      })
-    })
+      if (response.status == 200) {
+        const json = await response.json()
+        return json
+      } else {
+        throw "http status code is different."
+      }
+    } catch (e) {
+      handleError(e, "failed to update notes.")
+      return null
+    }
   }
-  addRecord(records: Record[]): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      fetch(this.url + "/record", {
+  async addRecords(records: Record[]): Promise<Record[]> {
+    try {
+      const response = await fetch(this.url + "/record", {
         method: "post",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(records)
       })
-      .then(response => {
-        if (response.ok && response.status == 200) {
-          resolve("ok")
-        } else {
-          reject("Server returned error: " + response.status)
-        }
-      })
-      .catch(err => {
-        reject("Failed to fetch: " + err)
-      })
-    })
+      if (response.status == 201) {
+        const json = await response.json()
+        return json
+      } else {
+        throw "http status code is different."
+      }
+    } catch (e) {
+      handleError(e, "failed to update notes.")
+      return null
+    }
   }
 }
 
