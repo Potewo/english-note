@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Record } from '../utils/record'
-  import type { Note } from '../utils/note'
+  import type { Record } from '@utils/record'
+  import type { Note } from '@utils/note'
   export let records: Record[]
   export let notes: Note[]
 </script>

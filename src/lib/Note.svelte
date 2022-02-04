@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Note } from '../utils/note'
-  import { notes } from '../utils/store'
+  import type { Note } from '@utils/note'
+  import { notes } from '@utils/store'
   export let note: Note = {
     ID: 0,
     CreatedAt: null,

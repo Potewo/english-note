@@ -5,8 +5,8 @@
   import Note from 'lib/Note.svelte'
   import QuizView from 'routes/QuizView.svelte'
   import Header from 'lib/Header.svelte'
-  import { notes } from './utils/store'
-  import type { Tag } from './utils/note'
+  import { notes } from '@utils/store'
+  import type { Tag } from '@utils/note'
   let tags: Tag[] = []
   notes.get()
 </script>

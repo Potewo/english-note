@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Tag } from 'scripts/note'
+  import type { Tag } from '@utils/note'
   import TagView from 'lib/TagView.svelte'
   import Note from 'lib/Note.svelte'
 

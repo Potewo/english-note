@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { records } from '../utils/store'
-  import type { Record } from '../utils/record'
-  import type { Note } from '../utils/note'
+  import { records } from '@utils/store'
+  import type { Record } from '@utils/record'
+  import type { Note } from '@utils/note'
   import Quiz from 'lib/Quiz.svelte'
   import QuizResult from 'lib/QuizResult.svelte'
   export let notes: Note[]

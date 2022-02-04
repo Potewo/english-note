@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Tag } from '../utils/note'
+  import type { Tag } from '@utils/note'
   import TagComponent from 'lib/Tag.svelte'
   export let tags: Tag[] = []
   export let viewMode: boolean = false
