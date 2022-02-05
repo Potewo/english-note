@@ -16,7 +16,11 @@
     Tags: [],
   };
   export let mode: "new" | "view" | "update" = "view";
+  if (mode != "new") {
+    tags = note.Tags
+  }
   const handleSend = () => {
+    note.Tags = tags;
     if (mode == "new") {
       notes.add([note]);
     } else if (mode == "update") {

@@ -2,7 +2,7 @@
   import { Router, Route } from "svelte-routing";
   import New from "routes/New.svelte";
   import NoteList from "lib/NoteList.svelte";
-  import Note from "lib/NoteView.svelte";
+  import NoteView from "lib/NoteView.svelte";
   import QuizView from "routes/QuizView.svelte";
   import Header from "lib/Header.svelte";
   import { notes } from "@utils/store";
@@ -21,13 +21,12 @@
       <NoteList />
     </Route>
     <Route path="notes/:id" let:params>
-      <Note
+      <NoteView
         note={$notes.find((obj) => obj.ID == Number(params.id))}
-        bind:tags
       />
     </Route>
     <Route path="edit/:id" let:params>
-      <Note
+      <NoteView
         note={$notes.find((obj) => obj.ID == Number(params.id))}
         mode={"update"}
         bind:tags
