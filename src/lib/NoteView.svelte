@@ -1,6 +1,8 @@
 <script lang="ts">
-  import type { Note } from "@utils/note";
+  import type { Note, Tag } from "@utils/note";
   import { notes } from "@utils/store";
+  import TagView from "lib/TagView.svelte";
+  export let tags: Tag[] = [];
   export let note: Note = {
     ID: 0,
     CreatedAt: null,
@@ -24,6 +26,7 @@
 </script>
 
 <div class="uk-card uk-card-default uk-card-body uk-width-1-2@m uk-margin-auto">
+  <TagView bind:tags viewMode={mode == "view"}/>
   <h3 class="uk-title">
     <label for="english">英語</label>
   </h3>

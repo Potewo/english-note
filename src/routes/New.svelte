@@ -1,10 +1,8 @@
 <script lang="ts">
-  import type { Tag } from '@utils/note'
-  import TagView from 'lib/TagView.svelte'
-  import Note from 'lib/Note.svelte'
+  import type { Tag } from "@utils/note";
+  import Note from "lib/NoteView.svelte";
 
-  export let tags: Tag[]
+  export let tags: Tag[];
 </script>
 
-<TagView bind:tags={tags}/>
-<Note mode={"new"}/>
+<Note mode={"new"} bind:tags />

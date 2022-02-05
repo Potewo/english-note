@@ -1,25 +1,25 @@
 <script lang="ts">
-  import { records } from '@utils/store'
-  import type { Record } from '@utils/record'
-  import type { Note } from '@utils/note'
-  import Quiz from 'lib/Quiz.svelte'
-  import QuizResult from 'lib/QuizResult.svelte'
-  export let notes: Note[]
-  let currentRecords: Record[] = []
-  let i = 0
-  let showResult = false
+  import { records } from "@utils/store";
+  import type { Record } from "@utils/record";
+  import type { Note } from "@utils/note";
+  import Quiz from "lib/Quiz.svelte";
+  import QuizResult from "lib/QuizResult.svelte";
+  export let notes: Note[];
+  let currentRecords: Record[] = [];
+  let i = 0;
+  let showResult = false;
   const prev = () => {
     if (i <= 0) {
-      return
+      return;
     }
-    i--
-  }
+    i--;
+  };
   const next = () => {
     if (i >= notes.length - 1) {
-      return
+      return;
     }
-    i++
-  }
+    i++;
+  };
   const handleAnswer = (answer: boolean) => {
     let record: Record = {
       ID: null,
@@ -28,47 +28,56 @@
       DeletedAt: null,
       NoteID: notes[i].ID,
       Correct: answer,
-    }
-    currentRecords.push(record)
+    };
+    currentRecords.push(record);
     if (i >= notes.length - 1) {
-      records.add(currentRecords)
-      showResult = true
+      records.add(currentRecords);
+      showResult = true;
     } else {
-      i++
+      i++;
     }
-  }
-  console.log(notes)
+  };
+  console.log(notes);
 </script>
 
 {#if showResult}
-  <QuizResult notes={notes} records={currentRecords} />
+  <QuizResult {notes} records={currentRecords} />
 {:else}
-
   <Quiz note={notes[i]} />
 
   <div class="uk-width-1-2@m uk-margin-auto uk-margin-medium-top">
     <div class="uk-text-center">
-      <button class="uk-button uk-button-default uk-margin-auto-left" on:click={() => {handleAnswer(false)}}>
-        <span uk-icon="icon: close"></span>
+      <button
+        class="uk-button uk-button-default uk-margin-auto-left"
+        on:click={() => {
+          handleAnswer(false);
+        }}
+      >
+        <span uk-icon="icon: close" />
       </button>
-      <button class="uk-button uk-button-default uk-margin-small-left uk-margin-right-auto" on:click={() => {handleAnswer(true)}}>
-        <span uk-icon="icon: check"></span>
-      </button>
+      <button
+        class="uk-button uk-button-default uk-margin-small-left uk-margin-right-auto"
+        on:click={() => {
+          handleAnswer(true);
+        }}
+      >
+        <span uk-icon="icon: check" /></button
+      >
     </div>
   </div>
 
   <div class="uk-margin-auto uk-width-1-2@m uk-margin-small-top">
-  <ul class="uk-pagination">
-    <li class="uk-margin-small-left">
-      <button on:click={prev} class="uk-button uk-button-link">
-        <span class="uk-margin-small-right" uk-pagination-previous></span>
-      </button>
-    </li>
-    <li class="uk-margin-auto-left uk-margin-small-right">
-      <button on:click={next} class="uk-button uk-button-link">
-        <span class="uk-margin-small-left" uk-pagination-next></span>
-      </button>
-    </li>
-  </ul>
+    <ul class="uk-pagination">
+      <li class="uk-margin-small-left">
+        <button on:click={prev} class="uk-button uk-button-link">
+          <span class="uk-margin-small-right" uk-pagination-previous />
+        </button>
+      </li>
+      <li class="uk-margin-auto-left uk-margin-small-right">
+        <button on:click={next} class="uk-button uk-button-link">
+          <span class="uk-margin-small-left" uk-pagination-next />
+        </button>
+      </li>
+    </ul>
   </div>
 {/if}
