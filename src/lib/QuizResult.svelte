@@ -13,7 +13,7 @@
       {:else}
         <span uk-icon="close"></span>
       {/if}
-      <span>{notes.find(note => note.ID == record.ID).English}</span>
+      <span>{notes.find(note => note.ID == record.NoteID).English}</span>
     </p>
   {/each}
 </div>
