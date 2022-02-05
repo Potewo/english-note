@@ -20,7 +20,7 @@
     }
     i++;
   };
-  const handleAnswer = (answer: boolean) => {
+  const handleAnswer = async (answer: boolean) => {
     let record: Record = {
       ID: null,
       CreatedAt: null,
@@ -31,7 +31,7 @@
     };
     currentRecords.push(record);
     if (i >= notes.length - 1) {
-      records.add(currentRecords);
+      await records.add(currentRecords);
       showResult = true;
     } else {
       i++;
