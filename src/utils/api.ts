@@ -66,7 +66,7 @@ class Api {
       return null
     }
   }
-  async deleteNotes(notes: Note[]) {
+  async deleteNotes(notes: Note[]) :Promise<boolean> {
     try {
       const response = await fetch(this.url + "/note", {
         method: "delete",
@@ -78,8 +78,10 @@ class Api {
       if (response.status != 200) {
         throw "http status code is different."
       }
+      return true
     } catch (e) {
       handleError(e, "failed to update notes.")
+      return false
     }
   }
   async getRecords(): Promise<Record[]> {
@@ -123,7 +125,7 @@ class Api {
   }
 }
 
-let url = "http://localhost:1323"
+let url = location.protocol + "//" + location.hostname + ":1323";
 if (import.meta.env.PROD) {
   url = location.origin
 }

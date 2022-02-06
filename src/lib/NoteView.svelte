@@ -26,6 +26,18 @@
     } else if (mode == "update") {
       notes.update([note]);
     }
+    note = {
+      ID: 0,
+      CreatedAt: null,
+      UpdatedAt: null,
+      DeletedAt: null,
+      English: "",
+      Japanese: "",
+      Description: "",
+      Examples: "",
+      Similar: "",
+      Tags: [],
+    };
   };
 </script>
 

@@ -1,14 +1,17 @@
-import { writable } from 'svelte/store'
-import type { Note } from './note'
-import type { Record } from './record'
+import {writable} from 'svelte/store'
+import type {Note} from './note'
+import type {Record} from './record'
+import {handleError} from '@utils/util'
 
-import { api } from './api'
+import {api} from './api'
 
 const useNote = () => {
-  const { subscribe, set, update: _update } = writable<Note[]>([])
+  const {subscribe, set, update: _update} = writable<Note[]>([])
   const get = async () => {
-    //TODO:エラーハンドリング
-    const newNotes = await api.getNotes()
+    const newNotes = await api.getNotes().catch(err => {
+      handleError(err, "failed to get notes");
+      return []
+    })
     console.log(newNotes)
     if (newNotes != null) {
       set(newNotes)
@@ -21,7 +24,8 @@ const useNote = () => {
         return [...notes, ..._newNotes]
       }
       return [...notes]
-  })}
+    })
+  }
   const update = async (newNotes: Note[]) => {
     const _newNotes = await api.updateNotes(newNotes)
     _update((oldNotes: Note[]) => {
@@ -39,20 +43,23 @@ const useNote = () => {
     })
   }
   const deletes = async (deleteNotes: Note[]) => {
-    const _deleteNotes = await api.deleteNotes(deleteNotes)
+    const success = await api.deleteNotes(deleteNotes)
+    if (success) {
       _update((oldNotes: Note[]) => {
-      if (_deleteNotes != null) {
-        return oldNotes.filter(_note => {
-          for (const note of _deleteNotes) {
+        let updatedNotes = oldNotes.filter(_note => {
+          for (const note of deleteNotes) {
             if (note.ID == _note.ID) {
               return false
             }
           }
           return true
         })
-      }
-      return [...oldNotes]
-    })
+        console.log(updatedNotes);
+        return updatedNotes;
+      })
+    } else {
+      handleError(null, "failed to delete notes.")
+    }
   }
 
   return {
@@ -65,7 +72,7 @@ const useNote = () => {
 }
 
 const useRecord = () => {
-  const { subscribe, set, update: _update } = writable<Record[]>([])
+  const {subscribe, set, update: _update} = writable<Record[]>([])
   const get = async () => {
     const newRecords = await api.getRecords()
     if (newRecords != null) {
