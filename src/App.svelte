@@ -6,8 +6,7 @@
   import QuizView from "routes/QuizView.svelte";
   import Header from "lib/Header.svelte";
   import { notes } from "@utils/store";
-  import type { Tag } from "@utils/note";
-  let tags: Tag[] = [];
+  let tagNames: string[] = [];
   notes.get();
 </script>
 
@@ -15,7 +14,7 @@
 <main>
   <Router>
     <Route path="new">
-      <New bind:tags />
+      <New bind:tagNames />
     </Route>
     <Route path="/">
       <NoteList />
@@ -29,7 +28,6 @@
       <NoteView
         note={$notes.find((obj) => obj.ID == Number(params.id))}
         mode={"update"}
-        bind:tags
       />
     </Route>
     <Route path="/quiz">
