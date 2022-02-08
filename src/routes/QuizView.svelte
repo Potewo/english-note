@@ -20,7 +20,7 @@
     }
     i++;
   };
-  const handleAnswer = async (answer: boolean) => {
+  const handleAnswer = async (answer: number) => {
     let record: Record = {
       ID: null,
       CreatedAt: null,
@@ -46,23 +46,47 @@
   <Quiz note={notes[i]} />
 
   <div class="uk-width-1-2@m uk-margin-auto uk-margin-medium-top">
-    <div class="uk-text-center">
+    <div class="uk-text-center" uk-grid>
       <button
-        class="uk-button uk-button-default uk-margin-auto-left"
+        class="uk-button uk-button-default uk-margin-auto-left uk-width-1-6 uk-width-auto@m"
         on:click={() => {
-          handleAnswer(false);
+          handleAnswer(1);
         }}
       >
-        <span uk-icon="icon: close" />
+        <span>1</span>
       </button>
       <button
-        class="uk-button uk-button-default uk-margin-small-left uk-margin-right-auto"
+        class="uk-button uk-button-default uk-margin-small-left uk-margin-right-auto uk-width-1-6 uk-width-auto@m"
         on:click={() => {
-          handleAnswer(true);
+          handleAnswer(2);
         }}
       >
-        <span uk-icon="icon: check" /></button
+        <span>2</span>
+      </button>
+      <button
+        class="uk-button uk-button-default uk-margin-small-left uk-margin-right-auto uk-width-1-6 uk-width-auto@m"
+        on:click={() => {
+          handleAnswer(3);
+        }}
       >
+        <span>3</span>
+      </button>
+      <button
+        class="uk-button uk-button-default uk-margin-small-left uk-margin-right-auto uk-width-1-6 uk-width-auto@m"
+        on:click={() => {
+          handleAnswer(4);
+        }}
+      >
+        <span>4</span>
+      </button>
+      <button
+        class="uk-button uk-button-default uk-margin-small-left uk-margin-right-auto uk-width-1-6 uk-width-auto@m"
+        on:click={() => {
+          handleAnswer(5);
+        }}
+      >
+        <span>5</span>
+      </button>
     </div>
   </div>
 

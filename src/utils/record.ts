@@ -3,6 +3,6 @@ export type Record = {
   CreatedAt: string
   UpdatedAt: string
   DeletedAt: string
-  Correct: boolean
+  Correct: number
   NoteID: number
 }
