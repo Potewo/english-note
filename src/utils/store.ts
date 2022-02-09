@@ -10,11 +10,10 @@ const useNote = () => {
   const get = async () => {
     const newNotes = await api.getNotes().catch(err => {
       handleError(err, "failed to get notes");
-      return []
+      return {value: Array<Note>(), page: 1, lastPage: 1}
     })
-    console.log(newNotes)
-    if (newNotes != null) {
-      set(newNotes)
+    if (newNotes != null && newNotes.value != []) {
+      set(newNotes.value)
     }
   }
   const add = async (newNotes: Note[]) => {

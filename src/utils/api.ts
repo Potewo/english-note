@@ -1,15 +1,26 @@
-import type { Note } from './note'
-import type { Record } from './record'
-import { handleError } from './util'
+import type {Note} from './note'
+import type {Record} from './record'
+import type {WithPagination} from "./types"
+import {handleError} from './util'
 
 class Api {
   url: string
   constructor(url: string) {
     this.url = url
   }
-  async getNotes(): Promise<Note[]> {
+  async getNotes(): Promise<WithPagination<Note[]>> {
+    const queries = new URLSearchParams(window.location.search)
+    const page = queries.get("page")
+    const pageSize = queries.get("page_size")
     try {
-      const response = await fetch(this.url + "/note", {
+      const urlWithParams = new URL(this.url + "/note")
+      if (page != null) {
+        urlWithParams.searchParams.set("page", page)
+      }
+      if (pageSize != null) {
+        urlWithParams.searchParams.set("page_size", pageSize)
+      }
+      const response = await fetch(urlWithParams.toString(), {
         method: "get",
         headers: {
           "Content-Type": "application/json"
@@ -17,13 +28,15 @@ class Api {
       })
       if (response.status == 200) {
         const json = await response.json()
-        return json
+        const lastPage = Number(response.headers.get("Englishnote-Lastpage"))
+        console.log("lastPage: ", lastPage)
+        return {value: json, page: Number(page), lastPage: lastPage}
       } else {
         throw "http status code is different."
       }
     } catch (e) {
       handleError(e, "failed to get notes.")
-      return []
+      return {value: [], page: 1, lastPage: 1}
     }
   }
   async addNotes(notes: Note[]): Promise<Note[]> {
@@ -66,7 +79,7 @@ class Api {
       return null
     }
   }
-  async deleteNotes(notes: Note[]) :Promise<boolean> {
+  async deleteNotes(notes: Note[]): Promise<boolean> {
     try {
       const response = await fetch(this.url + "/note", {
         method: "delete",
