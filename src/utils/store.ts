@@ -7,14 +7,15 @@ import {api} from './api'
 
 const useNote = () => {
   const {subscribe, set, update: _update} = writable<Note[]>([])
-  const get = async () => {
-    const newNotes = await api.getNotes().catch(err => {
+  const get = async (page: number, pageSize: number) : Promise<number> => {
+    const newNotes = await api.getNotes(page, pageSize).catch(err => {
       handleError(err, "failed to get notes");
       return {value: Array<Note>(), page: 1, lastPage: 1}
     })
     if (newNotes != null && newNotes.value != []) {
       set(newNotes.value)
     }
+    return newNotes.lastPage
   }
   const add = async (newNotes: Note[]) => {
     const _newNotes = await api.addNotes(newNotes)

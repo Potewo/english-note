@@ -8,17 +8,14 @@ class Api {
   constructor(url: string) {
     this.url = url
   }
-  async getNotes(): Promise<WithPagination<Note[]>> {
-    const queries = new URLSearchParams(window.location.search)
-    const page = queries.get("page")
-    const pageSize = queries.get("page_size")
+  async getNotes(page: number, pageSize: number): Promise<WithPagination<Note[]>> {
     try {
       const urlWithParams = new URL(this.url + "/note")
       if (page != null) {
-        urlWithParams.searchParams.set("page", page)
+        urlWithParams.searchParams.set("page", String(page))
       }
       if (pageSize != null) {
-        urlWithParams.searchParams.set("page_size", pageSize)
+        urlWithParams.searchParams.set("page_size", String(pageSize))
       }
       const response = await fetch(urlWithParams.toString(), {
         method: "get",

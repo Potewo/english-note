@@ -6,8 +6,10 @@
   import QuizView from "routes/QuizView.svelte";
   import Header from "lib/Header.svelte";
   import { notes } from "@utils/store";
+  import { getPageQuery } from "@utils/util";
   let tagNames: string[] = [];
-  notes.get();
+  let [page, pageSize] = getPageQuery();
+  notes.get(page, pageSize);
 </script>
 
 <Header />
