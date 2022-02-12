@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Router, Route } from "svelte-routing";
   import New from "routes/New.svelte";
-  import NoteList from "lib/NoteList.svelte";
+  import Top from "routes/Top.svelte";
   import NoteView from "lib/NoteView.svelte";
   import QuizView from "routes/QuizView.svelte";
   import Header from "lib/Header.svelte";
@@ -9,7 +9,7 @@
   import { getPageQuery } from "@utils/util";
   let tagNames: string[] = [];
   let [page, pageSize] = getPageQuery();
-  notes.get(page, pageSize);
+  notes.get({mode: "pagination", page: page, pageSize: pageSize});
 </script>
 
 <Header />
@@ -19,7 +19,7 @@
       <New bind:tagNames />
     </Route>
     <Route path="/">
-      <NoteList />
+      <Top />
     </Route>
     <Route path="notes/:id" let:params>
       <NoteView

@@ -4,7 +4,7 @@
   import { getPageQuery, handleError } from "@utils/util"
   let [page, pageSize] = getPageQuery();
   let lastPage = 1;
-  notes.get(page, pageSize).then(_lastPage => {
+  notes.get({mode: "pagination", page, pageSize}).then(_lastPage => {
     lastPage = _lastPage
   }).catch(err => {
     lastPage = 1;
@@ -16,7 +16,7 @@
     } else {
       return;
     }
-    lastPage = await notes.get(page, pageSize);
+    lastPage = await notes.get({mode: "pagination", page, pageSize});
     window.scrollTo({top: 0})
   }
   const beforeMoveNext = async () => {
@@ -25,22 +25,31 @@
     } else {
       return;
     }
-    lastPage = await notes.get(page, pageSize);
+    lastPage = await notes.get({mode: "pagination", page, pageSize});
     window.scrollTo({top: 0})
   }
   const beforeMoveStart = async () => {
     page = 1;
-    await notes.get(page, pageSize);
+    await notes.get({mode: "pagination", page, pageSize});
     window.scrollTo({top: 0});
   }
   const beforeMoveEnd = async () => {
     page = lastPage;
-    await notes.get(page, pageSize);
+    await notes.get({mode: "pagination", page, pageSize});
     window.scrollTo({top: 0});
+  }
+  let randomLimit = 30;
+  const handleRandom = async () => {
+    lastPage = await notes.get({mode: "random", limit: randomLimit})
   }
 </script>
 
 <!-- <TagView bind:tags={$notes} dataList={$notes.map(note => note.Tags.map(tag => tag.Name)).flat()}/> */ -->
+<div>
+  <label for="random_n">問題数</label>
+  <input id="random_n" type="number" class="uk-select uk-form-width-small" bind:value={randomLimit}>
+  <button class="uk-button uk-button-default" on:click={handleRandom}>ランダム</button>
+</div>
 <table class="uk-table uk-table-middle uk-table-striped">
   <thead>
     <tr>
