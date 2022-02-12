@@ -45,10 +45,10 @@
 {:else}
   <Quiz note={notes[i]} />
 
-  <div class="uk-width-1-2@m uk-margin-auto uk-margin-medium-top">
-    <div class="uk-text-center" uk-grid>
+  <div class="uk-width-1-2@m uk-margin-auto uk-margin-medium-top uk-text-center">
+    <div class="uk-button-group uk-margin-auto">
       <button
-        class="uk-button uk-button-default uk-margin-auto-left uk-width-1-6 uk-width-auto@m"
+        class="uk-button uk-button-default"
         on:click={() => {
           handleAnswer(1);
         }}
@@ -56,7 +56,7 @@
         <span>1</span>
       </button>
       <button
-        class="uk-button uk-button-default uk-margin-small-left uk-margin-right-auto uk-width-1-6 uk-width-auto@m"
+        class="uk-button uk-button-default"
         on:click={() => {
           handleAnswer(2);
         }}
@@ -64,7 +64,7 @@
         <span>2</span>
       </button>
       <button
-        class="uk-button uk-button-default uk-margin-small-left uk-margin-right-auto uk-width-1-6 uk-width-auto@m"
+        class="uk-button uk-button-default"
         on:click={() => {
           handleAnswer(3);
         }}
@@ -72,7 +72,7 @@
         <span>3</span>
       </button>
       <button
-        class="uk-button uk-button-default uk-margin-small-left uk-margin-right-auto uk-width-1-6 uk-width-auto@m"
+        class="uk-button uk-button-default"
         on:click={() => {
           handleAnswer(4);
         }}
@@ -80,7 +80,7 @@
         <span>4</span>
       </button>
       <button
-        class="uk-button uk-button-default uk-margin-small-left uk-margin-right-auto uk-width-1-6 uk-width-auto@m"
+        class="uk-button uk-button-default"
         on:click={() => {
           handleAnswer(5);
         }}
