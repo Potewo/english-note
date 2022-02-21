@@ -97,6 +97,11 @@
           <span class="uk-margin-small-right" uk-pagination-previous />
         </button>
       </li>
+      <li class="uk-margin-auto-left uk-disabled">
+        <span>
+          {i+1}/{notes.length}
+        </span>
+      </li>
       <li class="uk-margin-auto-left uk-margin-small-right">
         <button on:click={next} class="uk-button uk-button-link">
           <span class="uk-margin-small-left" uk-pagination-next />
