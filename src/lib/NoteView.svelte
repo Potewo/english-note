@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { link as a } from "svelte-routing";
   import type { Note, Tag } from "@utils/note";
   import { notes } from "@utils/store";
   import TagView from "lib/TagView.svelte";
@@ -42,6 +43,7 @@
 </script>
 
 <div class="uk-card uk-card-default uk-card-body uk-width-1-2@m uk-margin-auto">
+  <a href={`/edit/${note.ID}`} class="uk-icon uk-align-right"><span class="material-icons-outlined">edit</span></a>
   <TagView bind:tags viewMode={mode == "view"}/>
   <h3 class="uk-title">
     <label for="english">英語</label>
