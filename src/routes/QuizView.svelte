@@ -43,7 +43,9 @@
 {#if showResult}
   <QuizResult {notes} records={currentRecords} />
 {:else}
-  <Quiz note={notes[i]} />
+  {#key notes[i]}
+    <Quiz note={notes[i]} />
+  {/key}
 
   <div class="uk-width-1-2@m uk-margin-auto uk-margin-medium-top uk-text-center">
     <div class="uk-button-group uk-margin-auto">

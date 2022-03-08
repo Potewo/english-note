@@ -3,6 +3,26 @@
   import TagView from "lib/TagView.svelte";
   export let note: Note;
   console.log(note);
+  let hiddens: {[name: string]: boolean} = {
+    japanese: true,
+    description: true,
+    examples: true,
+    similar: true
+  }
+  const toggleAllHiddens = () => {
+    for (let key of Object.keys(hiddens)) {
+      hiddens[key] = !hiddens[key]
+    }
+  }
+  const toggleHidden = (key: string) => {
+    hiddens[key] = !hiddens[key]
+  }
+  const hideAll = () => {
+    console.log("hide all");
+    for (let key of Object.keys(hiddens)) {
+      hiddens[key] = false;
+    }
+  }
 </script>
 
 <div class="uk-card uk-card-default uk-card-body uk-width-1-2@m uk-margin-auto">
@@ -11,40 +31,40 @@
   <p>
     <button
       type="button"
-      uk-toggle="target: #detail-japanese"
-      class="uk-button uk-button-default">日本語</button
+      class="uk-button uk-button-default"
+      on:click={() => toggleHidden("japanese")}>日本語</button
     >
   </p>
-  <p class="detail" id="detail-japanese" hidden>{note.Japanese}</p>
+  <p id="detail-japanese" hidden={hiddens["japanese"]}>{note.Japanese}</p>
   <p>
     <button
       type="button"
-      uk-toggle="target: #detail-description"
-      class="uk-button uk-button-default">説明</button
+      class="uk-button uk-button-default"
+      on:click={() => toggleHidden("description")}>説明</button
     >
   </p>
-  <p class="detail" id="detail-description" hidden>{note.Description}</p>
+  <p id="detail-description" hidden={hiddens["description"]}>{note.Description}</p>
   <p>
     <button
       type="button"
-      uk-toggle="target: #detail-examples"
-      class="uk-button uk-button-default">用例</button
+      class="uk-button uk-button-default"
+      on:click={() => toggleHidden("examples")}>用例</button
     >
   </p>
-  <p class="detail" id="detail-examples" hidden>{note.Examples}</p>
+  <p id="detail-examples" hidden={hiddens["examples"]}>{note.Examples}</p>
   <p>
     <button
       type="button"
-      uk-toggle="target: #detail-similar"
-      class="uk-button uk-button-default">類似</button
+      class="uk-button uk-button-default"
+      on:click={() => toggleHidden("examples")}>類似</button
     >
   </p>
-  <p class="detail" id="detail-similar" hidden>{note.Similar}</p>
+  <p id="detail-similar" hidden={hiddens["similar"]}>{note.Similar}</p>
   <p>
     <button
       type="button"
-      uk-toggle="target: .detail"
-      class="uk-button uk-button-default">すべて</button
+      class="uk-button uk-button-default"
+      on:click={() => toggleAllHiddens()}>すべて</button
     >
   </p>
 </div>
