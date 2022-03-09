@@ -17,12 +17,6 @@
   const toggleHidden = (key: string) => {
     hiddens[key] = !hiddens[key]
   }
-  const hideAll = () => {
-    console.log("hide all");
-    for (let key of Object.keys(hiddens)) {
-      hiddens[key] = false;
-    }
-  }
 </script>
 
 <div class="uk-card uk-card-default uk-card-body uk-width-1-2@m uk-margin-auto">
