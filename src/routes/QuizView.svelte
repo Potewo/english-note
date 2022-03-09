@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Modal from 'svelte-simple-modal';
   import { records } from "@utils/store";
   import type { Record } from "@utils/record";
   import type { Note } from "@utils/note";
@@ -41,7 +42,9 @@
 </script>
 
 {#if showResult}
-  <QuizResult {notes} records={currentRecords} />
+  <Modal>
+    <QuizResult {notes} records={currentRecords} />
+  </Modal>
 {:else}
   {#key notes[i]}
     <Quiz note={notes[i]} />

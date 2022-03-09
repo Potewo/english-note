@@ -17,6 +17,7 @@
     Tags: [],
   };
   export let mode: "new" | "view" | "update" = "view";
+  export let style: "modal" | "card" = "card";
   if (mode != "new") {
     tags = note.Tags
   }
@@ -40,9 +41,11 @@
       Tags: [],
     };
   };
+  const cardStyle = "uk-card uk-card-default uk-card-body uk-margin-auto uk-width-1-2@m";
+  const modalStyle = "";
 </script>
 
-<div class="uk-card uk-card-default uk-card-body uk-width-1-2@m uk-margin-auto">
+<div class={style == "card" ? cardStyle : modalStyle}>
   <a href={`/edit/${note.ID}`} class="uk-icon uk-align-right" use:link><span class="material-icons-outlined">edit</span></a>
   <TagView bind:tags viewMode={mode == "view"}/>
   <h3 class="uk-title">
