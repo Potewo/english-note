@@ -9,7 +9,7 @@
   import { getPageQuery } from "@utils/util";
   let tagNames: string[] = [];
   let [page, pageSize] = getPageQuery();
-  notes.get({mode: "pagination", page: page, pageSize: pageSize});
+  notes.get({page: page, pageSize: pageSize});
 </script>
 
 <Header />

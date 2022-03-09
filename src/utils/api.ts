@@ -3,27 +3,20 @@ import type {Record} from './record'
 import type {WithPagination} from "./types"
 import {handleError} from '@utils/util'
 
-export type RandomModeOptions = {
-  mode: "random"
-  limit: number
+export type ApiOptions = {
+  mode?: "random"
+  page?: number
+  pageSize?: number
 }
-
-export type PaginationModeOptions = {
-  mode: "pagination"
-  page: number
-  pageSize: number
-}
-
-export type NoteOptions = RandomModeOptions | PaginationModeOptions;
 
 class Api {
   url: string
   constructor(url: string) {
     this.url = url
   }
-  async getNotes(options: NoteOptions): Promise<WithPagination<Note[]>> {
+  async getNotes(options: ApiOptions): Promise<WithPagination<Note[]>> {
     try {
-      if (options.mode == "pagination") {
+      if (options.mode == null) {
         const urlWithParams = new URL(this.url + "/note")
         if (options.page != null) {
           urlWithParams.searchParams.set("page", String(options.page))
@@ -49,10 +42,10 @@ class Api {
       else if (options.mode == "random") {
         const urlWithParams = new URL(this.url + "/note")
         urlWithParams.searchParams.set("mode", "random")
-        if (options.limit) {
-          urlWithParams.searchParams.set("limit", String(options.limit))
+        if (options.pageSize) {
+          urlWithParams.searchParams.set("page_size", String(options.pageSize))
         } else {
-          urlWithParams.searchParams.set("limit", "30")
+          urlWithParams.searchParams.set("page_size", "30")
         }
         console.log(urlWithParams.toString())
         const response = await fetch(urlWithParams.toString(), {

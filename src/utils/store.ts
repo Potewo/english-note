@@ -4,11 +4,11 @@ import type {Record} from './record'
 import {handleError} from '@utils/util'
 
 import {api} from '@utils/api'
-import type { NoteOptions } from "@utils/api"
+import type { ApiOptions } from "@utils/api"
 
 const useNote = () => {
   const {subscribe, set, update: _update} = writable<Note[]>([])
-  const get = async (options: NoteOptions) : Promise<number> => {
+  const get = async (options: ApiOptions) : Promise<number> => {
     const newNotes = await api.getNotes(options).catch(err => {
       handleError(err, "failed to get notes");
       return {value: Array<Note>(), page: 1, lastPage: 1}
