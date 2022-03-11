@@ -4,9 +4,11 @@ import type {WithPagination} from "./types"
 import {handleError} from '@utils/util'
 
 export type ApiOptions = {
-  mode?: "random"
   page?: number
   pageSize?: number
+  search?: string
+  tags?: string[]
+  order?: "random" | "createdAtDescending" | "createdAtAscending" | "updatedAtDescending" | "updatedAtAscending" | "lastPlayedAtAscending" | "lastPlayedAtDescending" | "englishAscending" | "englishDescending"
 }
 
 class Api {
@@ -16,53 +18,38 @@ class Api {
   }
   async getNotes(options: ApiOptions): Promise<WithPagination<Note[]>> {
     try {
-      if (options.mode == null) {
-        const urlWithParams = new URL(this.url + "/note")
-        if (options.page != null) {
-          urlWithParams.searchParams.set("page", String(options.page))
-        }
-        if (options.pageSize != null) {
-          urlWithParams.searchParams.set("page_size", String(options.pageSize))
-        }
-        const response = await fetch(urlWithParams.toString(), {
-          method: "get",
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        if (response.status == 200) {
-          const json = await response.json()
-          const lastPage = Number(response.headers.get("Englishnote-Lastpage"))
-          console.log("lastPage: ", lastPage)
-          return {value: json, page: Number(options.page), lastPage: lastPage}
-        } else {
-          throw "http status code is different."
+      const urlWithParams = new URL(this.url + "/note")
+      if (options.page != undefined) {
+        urlWithParams.searchParams.set("page", String(options.page))
+      }
+      if (options.pageSize != undefined) {
+        urlWithParams.searchParams.set("page_size", String(options.pageSize))
+      }
+      if (options.search != undefined) {
+        urlWithParams.searchParams.set("search", options.search)
+      }
+      if (options.order != undefined) {
+        urlWithParams.searchParams.set("order", options.order)
+      }
+      if (options.tags != undefined) {
+        for (const tag of options.tags) {
+          urlWithParams.searchParams.append("tags", tag)
         }
       }
-      else if (options.mode == "random") {
-        const urlWithParams = new URL(this.url + "/note")
-        urlWithParams.searchParams.set("mode", "random")
-        if (options.pageSize) {
-          urlWithParams.searchParams.set("page_size", String(options.pageSize))
-        } else {
-          urlWithParams.searchParams.set("page_size", "30")
+      const response = await fetch(urlWithParams.toString(), {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json"
         }
-        console.log(urlWithParams.toString())
-        const response = await fetch(urlWithParams.toString(), {
-          method: "get",
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }).catch(err => {
-          throw err
-        })
-        if (response.status == 200) {
-          const json = await response.json()
-          return {value: json, page: 1, lastPage: 1}
-        } else {
-          console.error("Failed")
-          throw "http status is different."
-        }
+      })
+      if (response.status == 200) {
+        const json = await response.json()
+        const lastPage = Number(response.headers.get("Englishnote-Lastpage"))
+        console.log("lastPage: ", lastPage)
+        console.log(json);
+        return {value: json, page: Number(options.page), lastPage: lastPage}
+      } else {
+        throw "http status code is different."
       }
     } catch (e) {
       handleError(e, "failed to get notes.")

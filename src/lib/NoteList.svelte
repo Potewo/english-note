@@ -1,7 +1,9 @@
 <script lang="ts">
   import { link } from "svelte-routing";
   import { notes } from "@utils/store";
-  import { getPageQuery, handleError } from "@utils/util"
+  import { getPageQuery, handleError } from "@utils/util";
+  import type { ApiOptions } from "@utils/api";
+  import Filtering from "lib/Filtering.svelte"
   let [page, pageSize] = getPageQuery();
   let lastPage = 1;
   notes.get({page, pageSize}).then(_lastPage => {
@@ -38,17 +40,14 @@
     await notes.get({page, pageSize});
     window.scrollTo({top: 0});
   }
-  let randomPageSize = 30;
-  const handleRandom = async () => {
-    lastPage = await notes.get({mode: "random", pageSize: randomPageSize})
+  const handleSubmit = async (event: CustomEvent<ApiOptions>) => {
+    lastPage = await notes.get(event.detail)
   }
 </script>
 
 <!-- <TagView bind:tags={$notes} dataList={$notes.map(note => note.Tags.map(tag => tag.Name)).flat()}/> */ -->
 <div>
-  <label for="random_n">問題数</label>
-  <input id="random_n" type="number" class="uk-select uk-form-width-small" bind:value={randomPageSize}>
-  <button class="uk-button uk-button-default" on:click={handleRandom}>ランダム</button>
+  <Filtering on:submit={handleSubmit}/>
 </div>
 <table class="uk-table uk-table-middle uk-table-striped">
   <thead>
