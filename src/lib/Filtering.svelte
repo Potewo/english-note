@@ -1,6 +1,9 @@
 <script lang="ts">
   import type { ApiOptions } from "@utils/api";
   import { createEventDispatcher } from "svelte";
+  import TagView from "lib/TagView.svelte";
+  import type { Tag } from "@utils/note";
+  import { navigate } from "svelte-routing";
 
   let options: ApiOptions = {
     page: undefined,
@@ -10,14 +13,44 @@
     order: undefined,
   }
 
+  let tags: Tag[] = []
+
   const dispatch  = createEventDispatcher<{ submit: ApiOptions }>();
 
   const handleSubmit = () => {
+    options.tags = []
+    if (tags.length > 0) {
+      for (const tag of tags) {
+        options.tags.push(tag.Name);
+      }
+    }
+    setSearchQuery()
     dispatch('submit', options)
+  }
+
+  const setSearchQuery = () => {
+    const urlWithParams = new URL(window.location.href)
+    if (options.pageSize != undefined) {
+      urlWithParams.searchParams.set("page_size", String(options.pageSize))
+    }
+    if (options.search != undefined) {
+      urlWithParams.searchParams.set("search", options.search)
+    }
+    if (options.order != undefined) {
+      urlWithParams.searchParams.set("order", options.order)
+    }
+    if (options.tags != undefined) {
+      urlWithParams.searchParams.delete("tags")
+      for (const tag of options.tags) {
+        urlWithParams.searchParams.append("tags", tag)
+      }
+    }
+    navigate(urlWithParams.toString(), { replace: false })
   }
 </script>
 
 <form class="uk-form-horizontal">
+  <TagView bind:tags={tags}/>
   <label for="page_size">問題数</label>
   <input
     id="page_size"
