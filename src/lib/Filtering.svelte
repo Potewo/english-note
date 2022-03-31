@@ -9,32 +9,48 @@
     page: undefined,
     pageSize: undefined,
     search: undefined,
+    correctRate: {
+      start: undefined,
+      end: undefined,
+    },
     tags: undefined,
     order: undefined,
+    lastPlayed: {
+      start: undefined,
+      end: undefined,
+    },
   }
 
   let tags: Tag[] = []
+  let inputLastPlayedDateStart: string = undefined;
+  let inputLastPlayedDateEnd: string = undefined;
 
   const dispatch  = createEventDispatcher<{ submit: ApiOptions }>();
 
   const handleSubmit = () => {
-    options.tags = []
-    if (tags.length > 0) {
-      for (const tag of tags) {
-        options.tags.push(tag.Name);
-      }
-    }
     setSearchQuery()
     dispatch('submit', options)
   }
 
   const setSearchQuery = () => {
     const urlWithParams = new URL(window.location.href)
+    options.tags = []
+    if (tags.length > 0) {
+      for (const tag of tags) {
+        options.tags.push(tag.Name);
+      }
+    }
     if (options.pageSize != undefined) {
       urlWithParams.searchParams.set("page_size", String(options.pageSize))
     }
     if (options.search != undefined) {
       urlWithParams.searchParams.set("search", options.search)
+    }
+    if (options.correctRate.start != undefined) {
+      urlWithParams.searchParams.set("correct_rate_start", String(options.correctRate.start))
+    }
+    if (options.correctRate.end != undefined) {
+      urlWithParams.searchParams.set("correct_rate_end", String(options.correctRate.end))
     }
     if (options.order != undefined) {
       urlWithParams.searchParams.set("order", options.order)
@@ -45,7 +61,19 @@
         urlWithParams.searchParams.append("tags", tag)
       }
     }
+    if (options.lastPlayed.start != undefined) {
+      urlWithParams.searchParams.set("last_played_start", options.lastPlayed.start.toISOString())
+    }
+    if (options.lastPlayed.end != undefined) {
+      urlWithParams.searchParams.set("last_played_end", options.lastPlayed.end.toISOString())
+    }
     navigate(urlWithParams.toString(), { replace: false })
+  }
+
+  const updateDate = (s: string) : Date => {
+    let d = new Date(s)
+    d = new Date(d.getTime() + (d.getTimezoneOffset() * 60 * 1000))
+    return d
   }
 </script>
 
@@ -68,8 +96,6 @@
         <option value="createdAtAscending">作成昇順</option>
         <option value="updatedAtDescending">更新降順</option>
         <option value="updatedAtAscending">更新昇順</option>
-        <option value="lastPlayedAtDescending">最終プレイ降順</option>
-        <option value="lastPlayedAtAscending">最終プレイ昇順</option>
         <option value="englishDescending">英語降順</option>
         <option value="englishAscending">英語昇順</option>
       </select>
@@ -86,6 +112,27 @@
         class="uk-search-input"
         bind:value={options.search}
       />
+    </div>
+  </div>
+
+  <div class="uk-margin">
+    <span class="uk-text">正答率</span>
+    <div class="uk-form-controls">
+      <input class="uk-input uk-form-width-small" type="number" bind:value={options.correctRate.start}/>
+      <span>〜</span>
+      <input class="uk-input uk-form-width-small" type="number" bind:value={options.correctRate.end}/>
+    </div>
+  </div>
+
+  <div class="uk-margin">
+    <span class="uk-text">最後にプレイした日時</span>
+
+    <div class="uk-margin">
+      <div class="uk-form-controls">
+        <input type="date" class="uk-input uk-form-width-medium" bind:value={inputLastPlayedDateStart} on:change={() => {options.lastPlayed.start = updateDate(inputLastPlayedDateStart);console.log(options.lastPlayed.start)}}/>
+        <span>〜</span>
+        <input type="date" class="uk-input uk-form-width-medium" bind:value={inputLastPlayedDateEnd} on:change={() => options.lastPlayed.end = updateDate(inputLastPlayedDateEnd)}/>
+      </div>
     </div>
   </div>
 
