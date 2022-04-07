@@ -64,7 +64,7 @@
     {#if mode == "new" || mode == "update"}
       <textarea id="japanese" bind:value={note.Japanese} class="uk-textarea" />
     {:else}
-      <span>{note.Japanese}</span>
+      <span class="text">{note.Japanese}</span>
     {/if}
   </p>
 
@@ -77,7 +77,7 @@
         class="uk-textarea"
       />
     {:else}
-      <span>{note.Description}</span>
+      <span class="text">{note.Description}</span>
     {/if}
   </p>
 
@@ -86,7 +86,7 @@
     {#if mode == "new" || mode == "update"}
       <textarea id="examples" bind:value={note.Examples} class="uk-textarea" />
     {:else}
-      <span>{note.Examples}</span>
+      <span class="text">{note.Examples}</span>
     {/if}
   </p>
 
@@ -95,7 +95,7 @@
     {#if mode == "new" || mode == "update"}
       <textarea id="similar" bind:value={note.Similar} class="uk-textarea" />
     {:else}
-      <span>{note.Similar}</span>
+      <span class="text">{note.Similar}</span>
     {/if}
   </p>
   {#if mode == "new" || mode == "update"}
@@ -104,3 +104,9 @@
     >
   {/if}
 </div>
+
+<style>
+  .text {
+    white-space: pre-wrap;
+  }
+</style>
