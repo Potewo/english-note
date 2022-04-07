@@ -5,6 +5,8 @@
   import type { Tag } from "@utils/note";
   import { navigate } from "svelte-routing";
 
+  let accordionOpened = false;
+
   let options: ApiOptions = {
     page: undefined,
     pageSize: undefined,
@@ -77,64 +79,71 @@
   }
 </script>
 
-<form class="uk-form-horizontal">
-  <TagView bind:tags={tags}/>
-  <label for="page_size">問題数</label>
-  <input
-    id="page_size"
-    type="number"
-    class="uk-select uk-form-width-small uk-form-controls"
-    bind:value={options.pageSize}
-  />
+<ul uk-accordion>
+  <li>
+    <a class="uk-accordion-title">絞り込み</a>
+    <div class="uk-accordion-content">
+      <form class="uk-form-horizontal">
+        <TagView bind:tags={tags}/>
+        <label for="page_size">問題数</label>
+        <input
+          id="page_size"
+          type="number"
+          class="uk-select uk-form-width-small uk-form-controls"
+          bind:value={options.pageSize}
+        />
 
-  <div class="uk-margin">
-    <label for="order" class="uk-form-label">順序</label>
-    <div class="uk-form-controls">
-      <select id="order" name="order" class="uk-select uk-form-width-medium" bind:value={options.order}>
-        <option value="random">ランダム</option>
-        <option value="createdAtDescending">作成降順</option>
-        <option value="createdAtAscending">作成昇順</option>
-        <option value="updatedAtDescending">更新降順</option>
-        <option value="updatedAtAscending">更新昇順</option>
-        <option value="englishDescending">英語降順</option>
-        <option value="englishAscending">英語昇順</option>
-      </select>
+        <div class="uk-margin">
+          <label for="order" class="uk-form-label">順序</label>
+          <div class="uk-form-controls">
+            <select id="order" name="order" class="uk-select uk-form-width-medium" bind:value={options.order}>
+              <option value="random">ランダム</option>
+              <option value="createdAtDescending">作成降順</option>
+              <option value="createdAtAscending">作成昇順</option>
+              <option value="updatedAtDescending">更新降順</option>
+              <option value="updatedAtAscending">更新昇順</option>
+              <option value="englishDescending">英語降順</option>
+              <option value="englishAscending">英語昇順</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="uk-margin">
+          <label for="search" class="uk-form-label">検索</label>
+          <div class="uk-search uk-search-default">
+            <span uk-search-icon /><input
+              id="search"
+              type="text"
+              placeholder="Search..."
+              class="uk-search-input"
+              bind:value={options.search}
+            />
+          </div>
+        </div>
+
+        <div class="uk-margin">
+          <span class="uk-text">正答率</span>
+          <div class="uk-form-controls">
+            <input class="uk-input uk-form-width-small" type="number" bind:value={options.correctRate.start}/>
+            <span>〜</span>
+            <input class="uk-input uk-form-width-small" type="number" bind:value={options.correctRate.end}/>
+          </div>
+        </div>
+
+        <div class="uk-margin">
+          <span class="uk-text">最後にプレイした日時</span>
+
+          <div class="uk-margin">
+            <div class="uk-form-controls">
+              <input type="date" class="uk-input uk-form-width-medium" bind:value={inputLastPlayedDateStart} on:change={() => {options.lastPlayed.start = updateDate(inputLastPlayedDateStart);console.log(options.lastPlayed.start)}}/>
+              <span>〜</span>
+              <input type="date" class="uk-input uk-form-width-medium" bind:value={inputLastPlayedDateEnd} on:change={() => options.lastPlayed.end = updateDate(inputLastPlayedDateEnd)}/>
+            </div>
+          </div>
+        </div>
+
+        <button class="uk-button uk-button-default" on:click|preventDefault={handleSubmit}>絞り込み</button>
+      </form>
     </div>
-  </div>
-
-  <div class="uk-margin">
-    <label for="search" class="uk-form-label">検索</label>
-    <div class="uk-search uk-search-default">
-      <span uk-search-icon /><input
-        id="search"
-        type="text"
-        placeholder="Search..."
-        class="uk-search-input"
-        bind:value={options.search}
-      />
-    </div>
-  </div>
-
-  <div class="uk-margin">
-    <span class="uk-text">正答率</span>
-    <div class="uk-form-controls">
-      <input class="uk-input uk-form-width-small" type="number" bind:value={options.correctRate.start}/>
-      <span>〜</span>
-      <input class="uk-input uk-form-width-small" type="number" bind:value={options.correctRate.end}/>
-    </div>
-  </div>
-
-  <div class="uk-margin">
-    <span class="uk-text">最後にプレイした日時</span>
-
-    <div class="uk-margin">
-      <div class="uk-form-controls">
-        <input type="date" class="uk-input uk-form-width-medium" bind:value={inputLastPlayedDateStart} on:change={() => {options.lastPlayed.start = updateDate(inputLastPlayedDateStart);console.log(options.lastPlayed.start)}}/>
-        <span>〜</span>
-        <input type="date" class="uk-input uk-form-width-medium" bind:value={inputLastPlayedDateEnd} on:change={() => options.lastPlayed.end = updateDate(inputLastPlayedDateEnd)}/>
-      </div>
-    </div>
-  </div>
-
-  <button class="uk-button uk-button-default" on:click|preventDefault={handleSubmit}>絞り込み</button>
-</form>
+  </li>
+</ul>
