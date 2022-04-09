@@ -4,7 +4,14 @@ import { join } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [svelte()],
+  plugins: [
+    svelte({
+      onwarn: (warning, handler) => {
+        if (warning.code == "a11y-missing-attribute") return
+        handler(warning)
+      }
+    })
+  ],
   resolve: {
     dedupe: ["svelte", "svelte/transition", "svelte/internal"],
     extensions: [".svelte", ".ts"],

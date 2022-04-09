@@ -1,44 +1,48 @@
 <script lang="ts">
-  import { link } from "svelte-routing";
+  import { link, navigate } from "svelte-routing";
   import { notes } from "@utils/store";
-  import { getPageQuery, handleError } from "@utils/util";
+  import { handleError } from "@utils/util";
   import type { ApiOptions } from "@utils/api";
   import Filtering from "lib/Filtering.svelte"
-  let [page, pageSize] = getPageQuery();
+  import { apiOptions, apiOptionsToURL } from "@utils/store";
   let lastPage = 1;
-  notes.get({page, pageSize}).then(_lastPage => {
+  notes.get($apiOptions).then(_lastPage => {
     lastPage = _lastPage
   }).catch(err => {
     lastPage = 1;
     handleError(err, "failed to get lastpage.")
   })
   const beforeMovePrev = async () => {
-    if (page > 1) {
-      page--;
+    if ($apiOptions.page > 1) {
+      apiOptions.update({page: $apiOptions.page-1});
     } else {
       return;
     }
-    lastPage = await notes.get({page, pageSize});
+    lastPage = await notes.get($apiOptions);
     window.scrollTo({top: 0})
+    navigate(apiOptionsToURL(window.location.origin))
   }
   const beforeMoveNext = async () => {
-    if (page < lastPage) {
-      page++;
+    if ($apiOptions.page < lastPage) {
+      apiOptions.update({page: $apiOptions.page+1});
     } else {
       return;
     }
-    lastPage = await notes.get({page, pageSize});
+    lastPage = await notes.get($apiOptions);
     window.scrollTo({top: 0})
+    navigate(apiOptionsToURL(window.location.origin))
   }
   const beforeMoveStart = async () => {
-    page = 1;
-    await notes.get({page, pageSize});
+    apiOptions.update({page: 1});
+    await notes.get($apiOptions);
     window.scrollTo({top: 0});
+    navigate(apiOptionsToURL(window.location.origin))
   }
   const beforeMoveEnd = async () => {
-    page = lastPage;
-    await notes.get({page, pageSize});
+    apiOptions.update({page: lastPage});
+    await notes.get($apiOptions);
     window.scrollTo({top: 0});
+    navigate(apiOptionsToURL(window.location.origin))
   }
   const handleSubmit = async (event: CustomEvent<ApiOptions>) => {
     lastPage = await notes.get(event.detail)
@@ -129,13 +133,13 @@
 </table>
 
 <ul class="uk-pagination uk-flex-center" uk-margin>
-  <li><a href="?page={String(page)}&page_size={pageSize}" on:click={beforeMovePrev} use:link class:uk-disabled={page <= 1}><span uk-pagination-previous></span></a></li>
-  <li><a href="?page=1&page_size={pageSize}" on:click={beforeMoveStart} use:link>1</a></li>
+  <li><a on:click={beforeMovePrev} class:uk-disabled={$apiOptions.page <= 1}><span uk-pagination-previous></span></a></li>
+  <li><a on:click={beforeMoveStart}>1</a></li>
   <li class="uk-disabled"><span>...</span></li>
-  <li class="uk-active"><span>{page}</span></li>
+  <li class="uk-active"><span>{$apiOptions.page}</span></li>
   <li class="uk-disabled"><span>...</span></li>
-  <li><a href="?page={lastPage}&page_size={pageSize}" on:click={beforeMoveEnd} use:link>{lastPage}</a></li>
-  <li><a href="?page={page}&page_size={pageSize}" on:click={beforeMoveNext} use:link class:uk-disabled={page >= lastPage}><span uk-pagination-next></span></a></li>
+  <li><a on:click={beforeMoveEnd}>{lastPage}</a></li>
+  <li><a on:click={beforeMoveNext} class:uk-disabled={$apiOptions.page >= lastPage}><span uk-pagination-next></span></a></li>
 </ul>
 
 <style>

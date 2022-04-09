@@ -1,5 +1,6 @@
-import {writable} from 'svelte/store'
+import {writable, get} from 'svelte/store'
 import type {Note} from './note'
+import {EmptyNote} from './note'
 import type {Record} from './record'
 import {handleError} from '@utils/util'
 
@@ -95,5 +96,79 @@ const useRecord = () => {
   }
 }
 
+const useApiOptions = () => {
+  const {subscribe, set, update: _update} = writable<ApiOptions>({})
+  const update = (partialOptions: ApiOptions) => {
+    _update((options: ApiOptions) => {
+      return {...options, ...partialOptions}
+    })
+  }
+  return {
+    subscribe,
+    set,
+    update
+  }
+}
+
 export const notes = useNote()
 export const records = useRecord()
+export const apiOptions = useApiOptions()
+
+export const findNote = async (id: number) : Promise<Note> => {
+  notes
+  if (get(notes).some(note => note.ID == id)) {
+    return get(notes).find(note => note.ID == id)
+  } else {
+    try {
+      const noteWithPagination = await api.getNotes({ids: [id]})
+      return noteWithPagination.value[0]
+    } catch (err) {
+      handleError(err, "failed to get note from server")
+      return new Promise((resolve) => resolve(EmptyNote()))
+    }
+  }
+}
+
+export const apiOptionsToURL = (baseURL: string) => {
+  const url = new URL(baseURL);
+  const options = get(apiOptions)
+  if (options.page != undefined) {
+    if (options.page != 1) {
+      url.searchParams.set("page", String(options.page))
+    }
+  }
+  if (options.pageSize != undefined) {
+    if (options.pageSize != 30) {
+      url.searchParams.set("page_size", String(options.pageSize))
+    }
+  }
+  if (options.search != undefined) {
+    url.searchParams.set("search", options.search)
+  }
+  if (options.correctRate != undefined) {
+    if (options.correctRate.start != undefined) {
+      url.searchParams.set("correct_rate_start", String(options.correctRate.start))
+    }
+    if (options.correctRate.end != undefined) {
+      url.searchParams.set("correct_rate_end", String(options.correctRate.end))
+    }
+  }
+  if (options.order != undefined) {
+    url.searchParams.set("order", options.order)
+  }
+  if (options.tags != undefined) {
+    url.searchParams.delete("tags")
+    for (const tag of options.tags) {
+      url.searchParams.append("tags", tag)
+    }
+  }
+  if (options.lastPlayed != undefined) {
+    if (options.lastPlayed.start != undefined) {
+      url.searchParams.set("last_played_start", options.lastPlayed.start.toISOString())
+    }
+    if (options.lastPlayed.end != undefined) {
+      url.searchParams.set("last_played_end", options.lastPlayed.end.toISOString())
+    }
+  }
+  return url.toString();
+}

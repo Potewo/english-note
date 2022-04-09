@@ -5,32 +5,38 @@
   import NoteView from "lib/NoteView.svelte";
   import QuizView from "routes/QuizView.svelte";
   import Header from "lib/Header.svelte";
-  import { notes } from "@utils/store";
+  import { notes, findNote } from "@utils/store";
   import { getPageQuery } from "@utils/util";
-  let tagNames: string[] = [];
-  let [page, pageSize] = getPageQuery();
-  notes.get({page: page, pageSize: pageSize});
+  import { apiOptions } from "@utils/store";
+  import type { Tag } from "@utils/note";
+  let tags: Tag[] = [];
+  getPageQuery();
+  notes.get($apiOptions);
 </script>
 
 <Header />
 <main>
   <Router>
     <Route path="new">
-      <New bind:tagNames />
+      <New bind:tags />
     </Route>
     <Route path="/">
       <Top />
     </Route>
     <Route path="notes/:id" let:params>
+      {#await findNote(Number(params.id)) then note}
       <NoteView
-        note={$notes.find((obj) => obj.ID == Number(params.id))}
+        note={note}
       />
+      {/await}
     </Route>
     <Route path="edit/:id" let:params>
+      {#await findNote(Number(params.id)) then note}
       <NoteView
-        note={$notes.find((obj) => obj.ID == Number(params.id))}
+        note={note}
         mode={"update"}
       />
+      {/await}
     </Route>
     <Route path="/quiz">
       <QuizView notes={$notes} />

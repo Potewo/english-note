@@ -18,12 +18,12 @@
   };
   export let mode: "new" | "view" | "update" = "view";
   export let style: "modal" | "card" = "card";
-  if (mode != "new") {
-    tags = note.Tags
+  if (mode == "new") {
+    note.Tags = tags
   }
   const handleSend = () => {
-    note.Tags = tags;
     if (mode == "new") {
+      tags = note.Tags
       notes.add([note]);
     } else if (mode == "update") {
       notes.update([note]);
@@ -40,6 +40,7 @@
       Similar: "",
       Tags: [],
     };
+    note.Tags = tags;
   };
   const cardStyle = "uk-card uk-card-default uk-card-body uk-margin-auto uk-width-1-2@m";
   const modalStyle = "";
@@ -47,7 +48,7 @@
 
 <div class={style == "card" ? cardStyle : modalStyle}>
   <a href={`/edit/${note.ID}`} class="uk-icon uk-align-right" use:link><span class="material-icons-outlined">edit</span></a>
-  <TagView bind:tags viewMode={mode == "view"}/>
+  <TagView bind:tags={note.Tags} viewMode={mode == "view"}/>
   <h3 class="uk-title">
     <label for="english">英語</label>
   </h3>

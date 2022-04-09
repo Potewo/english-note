@@ -1,13 +1,19 @@
 <script lang="ts">
   import type { Tag } from '@utils/note'
   import TagComponent from 'lib/Tag.svelte'
+  import { createEventDispatcher } from "svelte";
   export let tags: Tag[] = []
   export let viewMode: boolean = false
   export let dataList: string[] = []
   let inputtingTag = ""
+  const dispatch = createEventDispatcher();
+  const onChange = () => {
+    dispatch("change");
+  }
   const deleteTag = (event: CustomEvent<number>) => {
     tags.splice(event.detail, 1)
     tags = tags
+    onChange();
   }
   const handleSubmit = () => {
     tags.push({
@@ -20,6 +26,7 @@
     })
     tags = tags
     inputtingTag = ""
+    onChange();
   }
 </script>
 

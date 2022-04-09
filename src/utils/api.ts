@@ -14,8 +14,9 @@ export type ApiOptions = {
   search?: string
   correctRate?: Range<number>
   tags?: string[]
-  order?: "random" | "createdAtDescending" | "createdAtAscending" | "updatedAtDescending" | "updatedAtAscending" | "englishAscending" | "englishDescending"
+  order?: string
   lastPlayed?: Range<Date>
+  ids?: number[]
 }
 
 class Api {
@@ -59,6 +60,11 @@ class Api {
         if (options.lastPlayed.end != undefined) {
           let date: string = options.lastPlayed.end.toISOString()
           urlWithParams.searchParams.set("last_played_end", date)
+        }
+      }
+      if (options.ids != undefined) {
+        for (let id of options.ids) {
+          urlWithParams.searchParams.append("ids", String(id))
         }
       }
       const response = await fetch(urlWithParams.toString(), {
