@@ -129,9 +129,8 @@ export const findNote = async (id: number) : Promise<Note> => {
   }
 }
 
-export const apiOptionsToURL = (baseURL: string) => {
+export const apiOptionsToURL = (baseURL: string, options: ApiOptions = get(apiOptions)) => {
   const url = new URL(baseURL);
-  const options = get(apiOptions)
   if (options.page != undefined) {
     if (options.page != 1) {
       url.searchParams.set("page", String(options.page))
