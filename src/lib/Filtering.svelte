@@ -67,23 +67,28 @@
     d = new Date(d.getTime() + d.getTimezoneOffset() * 60 * 1000);
     return d;
   };
+
+  const doNothing = () => {
+  }
 </script>
 
 <ul uk-accordion>
   <li>
     <a class="uk-accordion-title">絞り込み</a>
     <div class="uk-accordion-content">
-      <form class="uk-form-horizontal">
+      <form class="uk-form-horizontal" on:submit|preventDefault={handleSubmit}>
         <TagView bind:tags on:change={updateTags} />
         <label for="page_size">問題数</label>
         <input
           id="page_size"
           type="number"
           class="uk-select uk-form-width-small uk-form-controls"
+          on:change|preventDefault={doNothing}
           bind:value={options.pageSize}
         />
         <button
           class="uk-icon uk-inline"
+          type="button"
           on:click|preventDefault={() => {
             options.pageSize = undefined;
           }}
@@ -110,6 +115,7 @@
             </select>
             <button
               class="uk-icon uk-inline"
+              type="button"
               on:click|preventDefault={() => {
                 options.order = undefined;
               }}
@@ -127,11 +133,13 @@
               type="text"
               placeholder="Search..."
               class="uk-search-input"
+              on:change|preventDefault={doNothing}
               bind:value={options.search}
             />
           </div>
           <button
             class="uk-icon uk-inline"
+            type="button"
             on:click|preventDefault={() => {
               options.search = undefined;
             }}
@@ -146,16 +154,19 @@
             <input
               class="uk-input uk-form-width-small"
               type="number"
+              on:change|preventDefault={doNothing}
               bind:value={options.correctRate.start}
             />
             <span>〜</span>
             <input
               class="uk-input uk-form-width-small"
               type="number"
+              on:change|preventDefault={doNothing}
               bind:value={options.correctRate.end}
             />
             <button
               class="uk-icon uk-inline"
+              type="button"
               on:click|preventDefault={() => {
                 options.correctRate.start = undefined;
                 options.correctRate.end = undefined;
@@ -192,6 +203,7 @@
               />
               <button
                 class="uk-icon uk-inline"
+                type="button"
                 on:click|preventDefault={() => {
                   inputLastPlayedDateStart = undefined;
                   inputLastPlayedDateEnd = undefined;
@@ -205,10 +217,7 @@
           </div>
         </div>
 
-        <button
-          class="uk-button uk-button-default"
-          on:click|preventDefault={handleSubmit}>絞り込む</button
-        >
+        <button type="submit" class="uk-button uk-button-default">絞り込む</button>
       </form>
     </div>
   </li>
