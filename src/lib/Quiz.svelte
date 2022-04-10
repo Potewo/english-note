@@ -29,7 +29,7 @@
       on:click={() => toggleHidden("japanese")}>日本語</button
     >
   </p>
-  <p id="detail-japanese" hidden={hiddens["japanese"]}>{note.Japanese}</p>
+  <p id="detail-japanese" class="text" hidden={hiddens["japanese"]}>{note.Japanese}</p>
   <p>
     <button
       type="button"
@@ -37,7 +37,7 @@
       on:click={() => toggleHidden("description")}>説明</button
     >
   </p>
-  <p id="detail-description" hidden={hiddens["description"]}>{note.Description}</p>
+  <p id="detail-description" class="text" hidden={hiddens["description"]}>{note.Description}</p>
   <p>
     <button
       type="button"
@@ -45,7 +45,7 @@
       on:click={() => toggleHidden("examples")}>用例</button
     >
   </p>
-  <p id="detail-examples" hidden={hiddens["examples"]}>{note.Examples}</p>
+  <p id="detail-examples" class="text" hidden={hiddens["examples"]}>{note.Examples}</p>
   <p>
     <button
       type="button"
@@ -53,7 +53,7 @@
       on:click={() => toggleHidden("examples")}>類似</button
     >
   </p>
-  <p id="detail-similar" hidden={hiddens["similar"]}>{note.Similar}</p>
+  <p id="detail-similar" class="text" hidden={hiddens["similar"]}>{note.Similar}</p>
   <p>
     <button
       type="button"
@@ -62,3 +62,9 @@
     >
   </p>
 </div>
+
+<style>
+  .text {
+    white-space: pre-wrap;
+  }
+</style>
