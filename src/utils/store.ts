@@ -152,6 +152,12 @@ export const apiOptionsToURL = (baseURL: string, options: ApiOptions = get(apiOp
       url.searchParams.set("correct_rate_end", String(options.correctRate.end))
     }
   }
+  if (options.currentCorrectRate != undefined) {
+    if (options.currentCorrectRate.n && options.currentCorrectRate.rate) {
+      url.searchParams.set("current_correct_rate", String(options.currentCorrectRate.rate))
+      url.searchParams.set("current_correct_n", String(options.currentCorrectRate.n))
+    }
+  }
   if (options.order != undefined) {
     url.searchParams.set("order", options.order)
   }
@@ -169,5 +175,23 @@ export const apiOptionsToURL = (baseURL: string, options: ApiOptions = get(apiOp
       url.searchParams.set("last_played_end", options.lastPlayed.end.toISOString())
     }
   }
+
+  if (options.ids != undefined) {
+    for (let id of options.ids) {
+      url.searchParams.append("ids", String(id))
+    }
+  }
   return url.toString();
 }
+
+
+
+
+
+
+
+
+
+
+
+

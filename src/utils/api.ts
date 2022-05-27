@@ -2,6 +2,7 @@ import type {Note} from './note'
 import type {Record} from './record'
 import type {WithPagination} from "./types"
 import {handleError} from '@utils/util'
+import {apiOptionsToURL} from '@utils/store'
 
 export type Range<T> = {
   start?: T
@@ -17,6 +18,10 @@ export type ApiOptions = {
   order?: string
   lastPlayed?: Range<Date>
   ids?: number[]
+  currentCorrectRate?: {
+    rate: number
+    n: number
+  }
 }
 
 class Api {
@@ -26,48 +31,8 @@ class Api {
   }
   async getNotes(options: ApiOptions): Promise<WithPagination<Note[]>> {
     try {
-      const urlWithParams = new URL(this.url + "/note")
-      if (options.page != undefined) {
-        urlWithParams.searchParams.set("page", String(options.page))
-      }
-      if (options.pageSize != undefined) {
-        urlWithParams.searchParams.set("page_size", String(options.pageSize))
-      }
-      if (options.search != undefined) {
-        urlWithParams.searchParams.set("search", options.search)
-      }
-      if (options.correctRate != undefined) {
-        if (options.correctRate.start != undefined) {
-          urlWithParams.searchParams.set("correct_rate_start", String(options.correctRate.start))
-        }
-        if (options.correctRate.end != undefined) {
-          urlWithParams.searchParams.set("correct_rate_end", String(options.correctRate.end))
-        }
-      }
-      if (options.order != undefined) {
-        urlWithParams.searchParams.set("order", options.order)
-      }
-      if (options.tags != undefined) {
-        for (const tag of options.tags) {
-          urlWithParams.searchParams.append("tags", tag)
-        }
-      }
-      if (options.lastPlayed != undefined) {
-        if (options.lastPlayed.start != undefined) {
-          let date: string = options.lastPlayed.start.toISOString()
-          urlWithParams.searchParams.set("last_played_start", date)
-        }
-        if (options.lastPlayed.end != undefined) {
-          let date: string = options.lastPlayed.end.toISOString()
-          urlWithParams.searchParams.set("last_played_end", date)
-        }
-      }
-      if (options.ids != undefined) {
-        for (let id of options.ids) {
-          urlWithParams.searchParams.append("ids", String(id))
-        }
-      }
-      const response = await fetch(urlWithParams.toString(), {
+      const url = apiOptionsToURL(this.url + "/note", options)
+      const response = await fetch(url, {
         method: "get",
         headers: {
           "Content-Type": "application/json"

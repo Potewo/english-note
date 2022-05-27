@@ -7,6 +7,10 @@
   import { apiOptions, apiOptionsToURL } from "@utils/store";
 
   let options: ApiOptions = $apiOptions;
+  options.currentCorrectRate = {
+    rate: undefined,
+    n: undefined
+  }
   let tags: Tag[] = [];
   let inputLastPlayedDateStart: string = undefined;
   let inputLastPlayedDateEnd: string = undefined;
@@ -68,8 +72,7 @@
     return d;
   };
 
-  const doNothing = () => {
-  }
+  const doNothing = () => {};
 </script>
 
 <ul uk-accordion>
@@ -217,7 +220,35 @@
           </div>
         </div>
 
-        <button type="submit" class="uk-button uk-button-default">絞り込む</button>
+        <div class="uk-margin">
+          <span class="uk-text">最新の正答率</span>
+          <div class="uk-form-controls">
+            <label>
+              <span>正答率</span>
+              <input
+                type="number"
+                step="0.1"
+                class="uk-input uk-form-width-small"
+                on:change|preventDefault={doNothing}
+                bind:value={options.currentCorrectRate.rate}
+              />
+            </label>
+            <br />
+            <label>
+              <span>対象レコード数</span>
+              <input
+                type="number"
+                class="uk-input uk-form-width-small"
+                on:change|preventDefault={doNothing}
+                bind:value={options.currentCorrectRate.n}
+              />
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="uk-button uk-button-default"
+          >絞り込む</button
+        >
       </form>
     </div>
   </li>
